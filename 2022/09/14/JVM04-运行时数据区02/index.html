@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
-  <link rel="icon" href="/Blog/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="方法区(永久代&#x2F;元空间)详解栈、堆、方法区的交互关系&#x3D;&gt; 从线程共享与否的角度看  交互关系 &#x3D;&gt;   设置方法区大小及OOM12345678public class Test&amp;#123;    public static void main(String[] args)&amp;#123;        &#x2F;&#x2F;返回虚拟机试图使用的最大内存        long">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM04-运行时数据区02">
-<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/index.html">
+<meta property="og:url" content="https://he498.github.io/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="方法区(永久代&#x2F;元空间)详解栈、堆、方法区的交互关系&#x3D;&gt; 从线程共享与否的角度看  交互关系 &#x3D;&gt;   设置方法区大小及OOM12345678public class Test&amp;#123;    public static void main(String[] args)&amp;#123;        &#x2F;&#x2F;返回虚拟机试图使用的最大内存        long">
 <meta property="og:locale" content="zh_CN">
@@ -63,12 +63,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Blog/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -77,15 +77,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/Blog/js/utils.js" ></script>
-  <script  src="/Blog/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
 
@@ -102,7 +102,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Blog/">
+    <a class="navbar-brand" href="/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -121,7 +121,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -133,7 +133,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -145,7 +145,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -157,7 +157,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -169,7 +169,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -198,7 +198,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -274,11 +274,11 @@
                 
                 <h4 id="方法区-永久代-x2F-元空间-详解"><a href="#方法区-永久代-x2F-元空间-详解" class="headerlink" title="方法区(永久代&#x2F;元空间)详解"></a>方法区(永久代&#x2F;元空间)详解</h4><h5 id="栈、堆、方法区的交互关系"><a href="#栈、堆、方法区的交互关系" class="headerlink" title="栈、堆、方法区的交互关系"></a>栈、堆、方法区的交互关系</h5><p>&#x3D;&gt;</p>
 <p>从线程共享与否的角度看</p>
-<p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220828162930627.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828162930627"></p>
+<p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220828162930627.png" srcset="/img/loading.gif" lazyload alt="image-20220828162930627"></p>
 <p>交互关系</p>
 <p>&#x3D;&gt;</p>
-<p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220828163654621.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828163654621"></p>
-<p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220828164255125.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828164255125"></p>
+<p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220828163654621.png" srcset="/img/loading.gif" lazyload alt="image-20220828163654621"></p>
+<p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220828164255125.png" srcset="/img/loading.gif" lazyload alt="image-20220828164255125"></p>
 <h5 id="设置方法区大小及OOM"><a href="#设置方法区大小及OOM" class="headerlink" title="设置方法区大小及OOM"></a>设置方法区大小及OOM</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Test</span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span>&#123;<br>        <span class="hljs-comment">//返回虚拟机试图使用的最大内存</span><br>        <span class="hljs-type">long</span> <span class="hljs-variable">max</span> <span class="hljs-operator">=</span> Runtime.getRuntime.maxMemory();<br>        <span class="hljs-comment">//返回jvm的初始化总内存</span><br>        <span class="hljs-type">long</span> <span class="hljs-variable">total</span> <span class="hljs-operator">=</span> Runtime.getRuntime().totalMemory();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p><strong>设置大小：</strong></p>
@@ -305,7 +305,7 @@
 
 <p>&#x2F;&#x2F;爆出 OOM异常 java.lang.OutOfMemoryError: Java heap space</p>
 <p>可以使用 JPofiler工具分析OOM原因再进行问题排查。</p>
-<h5 id="方法区内部结构"><a href="#方法区内部结构" class="headerlink" title="方法区内部结构"></a>方法区内部结构</h5><p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220829143556024.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220829143556024"></p>
+<h5 id="方法区内部结构"><a href="#方法区内部结构" class="headerlink" title="方法区内部结构"></a>方法区内部结构</h5><p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220829143556024.png" srcset="/img/loading.gif" lazyload alt="image-20220829143556024"></p>
 <p><strong>方法区存储的信息：</strong></p>
 <ul>
 <li>类型信息</li>
@@ -348,7 +348,7 @@
 </ul>
 <p><strong>运行时常量池</strong></p>
 <p>要想弄清楚方法区的运行时常量池，必须先理解类文件中的常量池。因为运行时常量池是从常量池加载的。</p>
-<p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220830020330080.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830020330080"></p>
+<p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220830020330080.png" srcset="/img/loading.gif" lazyload alt="image-20220830020330080"></p>
 <ul>
 <li><p>几种在常量池内存储的数据类型包括：</p>
 <p>数量值</p>
@@ -374,7 +374,7 @@
 <li><p>当创建类或接口的运行时常量池时，如果构造运行时常量池所需的内存空间超过了方法区所能提供的最大值，则JVM会抛OutOfMemoryError异常。</p>
 </li>
 </ul>
-<h4 id="对象的实例化"><a href="#对象的实例化" class="headerlink" title="对象的实例化"></a>对象的实例化</h4><h5 id><a href="#" class="headerlink" title></a><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220830172320536.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830172320536"></h5><h5 id="创建对象的具体步骤："><a href="#创建对象的具体步骤：" class="headerlink" title="创建对象的具体步骤："></a>创建对象的具体步骤：</h5><p><strong>1.判断对象对应的类是否加载、链接、初始化</strong></p>
+<h4 id="对象的实例化"><a href="#对象的实例化" class="headerlink" title="对象的实例化"></a>对象的实例化</h4><h5 id><a href="#" class="headerlink" title></a><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220830172320536.png" srcset="/img/loading.gif" lazyload alt="image-20220830172320536"></h5><h5 id="创建对象的具体步骤："><a href="#创建对象的具体步骤：" class="headerlink" title="创建对象的具体步骤："></a>创建对象的具体步骤：</h5><p><strong>1.判断对象对应的类是否加载、链接、初始化</strong></p>
 <p> 检查元空间的常量池中是否有类的符号引用，检查是否加载链接初始化。</p>
 <ul>
 <li><p>如果是，则生成对应的Class文件。</p>
@@ -462,7 +462,7 @@
 </li>
 </ul>
 <p>StringTable为什么要调整 ？&#x3D;&gt; ①永久代permSize默认比较小; ②永久代的垃圾回收频率低;</p>
-<p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220830181412854.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830181412854"></p>
+<p><img src="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/image-20220830181412854.png" srcset="/img/loading.gif" lazyload alt="image-20220830181412854"></p>
 <h5 id="intern-的使用"><a href="#intern-的使用" class="headerlink" title="intern()的使用"></a>intern()的使用</h5><ul>
 <li>如果不是用双引号声明的String对象，可以使用String提供的intern方法： intern方法会从字符串常量池中查询当前字符串是否存在，若不存在就会将当前字符串放入常量池中。</li>
 <li>比如： String myInfo &#x3D; new String(“I love u”).intern()； 也就是说，如果在任意字符串上调用String. intern方法，那么其返回结果所指向的那个类实例，必须和直接以常量形式出现的字符串实例完全相同。因此，下 列表达式的值必定是true： （”a” + “b” + “c”）.intern（）&#x3D;&#x3D; “abc”; 通俗点讲，Interned String就是确保字符串在内存里只有一份拷贝，这样可以节约内存空间，加快字符串操作任务的执行速度。注意，这个值会被存放在字符串内部池（String Intern Pool）。</li>
@@ -508,7 +508,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/Blog/tags/JVM/">#JVM</a>
+        <a href="/tags/JVM/">#JVM</a>
       
     </div>
   
@@ -521,7 +521,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JVM04-运行时数据区02</div>
-      <div>https://he498.github.io/Blog/2022/09/14/JVM04-运行时数据区02/</div>
+      <div>https://he498.github.io/2022/09/14/JVM04-运行时数据区02/</div>
     </div>
     <div class="license-meta">
       
@@ -565,7 +565,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" title="JVM05-执行引擎">
+                      <a href="/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" title="JVM05-执行引擎">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">JVM05-执行引擎</span>
                         <span class="visible-mobile">上一篇</span>
@@ -575,7 +575,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" title="JVM03-运行时数据区">
+                      <a href="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" title="JVM03-运行时数据区">
                         <span class="hidden-mobile">JVM03-运行时数据区</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -702,8 +702,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Blog/js/events.js" ></script>
-<script  src="/Blog/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -725,7 +725,7 @@
 
 
   
-    <script  src="/Blog/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -824,7 +824,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Blog/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -832,7 +832,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Blog/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

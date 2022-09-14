@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
-  <link rel="icon" href="/Blog/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="常用的辅助类 CountDownLatch 1234567891011121314public static void main(String[] args) throws InterruptedException &amp;#123;        &#x2F;&#x2F;总数是6        CountDownLatch countDownLatch &#x3D; new CountDownLatch(6);        fo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JUC03-常用的辅助类及阻塞队列">
-<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/JUC03-%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB%E5%8F%8A%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/index.html">
+<meta property="og:url" content="https://he498.github.io/2022/09/14/JUC03-%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB%E5%8F%8A%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="常用的辅助类 CountDownLatch 1234567891011121314public static void main(String[] args) throws InterruptedException &amp;#123;        &#x2F;&#x2F;总数是6        CountDownLatch countDownLatch &#x3D; new CountDownLatch(6);        fo">
 <meta property="og:locale" content="zh_CN">
@@ -59,12 +59,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Blog/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -73,15 +73,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/Blog/js/utils.js" ></script>
-  <script  src="/Blog/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
 
@@ -98,7 +98,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Blog/">
+    <a class="navbar-brand" href="/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -117,7 +117,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -129,7 +129,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -141,7 +141,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -153,7 +153,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -165,7 +165,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -194,7 +194,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -276,7 +276,7 @@
 
 <blockquote>
 <h4 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h4></blockquote>
-<p><img src="/2022/09/14/JUC03-%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB%E5%8F%8A%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/image-20220713162033942.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220713162033942"></p>
+<p><img src="/2022/09/14/JUC03-%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB%E5%8F%8A%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/image-20220713162033942.png" srcset="/img/loading.gif" lazyload alt="image-20220713162033942"></p>
 <p>加法计数器</p>
 <blockquote>
 <h4 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h4></blockquote>
@@ -294,8 +294,8 @@
 
 
 
-<h1 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h1><p><img src="/2022/09/14/JUC03-%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB%E5%8F%8A%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/image-20220719155257425.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220719155257425"></p>
-<p><img src="/2022/09/14/JUC03-%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB%E5%8F%8A%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/image-20220719154001306.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220719154001306"></p>
+<h1 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h1><p><img src="/2022/09/14/JUC03-%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB%E5%8F%8A%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/image-20220719155257425.png" srcset="/img/loading.gif" lazyload alt="image-20220719155257425"></p>
+<p><img src="/2022/09/14/JUC03-%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BE%85%E5%8A%A9%E7%B1%BB%E5%8F%8A%E9%98%BB%E5%A1%9E%E9%98%9F%E5%88%97/image-20220719154001306.png" srcset="/img/loading.gif" lazyload alt="image-20220719154001306"></p>
 <h4 id="BlockingQueue"><a href="#BlockingQueue" class="headerlink" title="BlockingQueue"></a><strong>BlockingQueue</strong></h4><p>什么情况下 使用阻塞队列？ 多线程并发处理，线程池</p>
 <p>学会使用队列：</p>
 <p>​	添加、移除</p>
@@ -355,7 +355,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/Blog/tags/JUC/">#JUC</a>
+        <a href="/tags/JUC/">#JUC</a>
       
     </div>
   
@@ -368,7 +368,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JUC03-常用的辅助类及阻塞队列</div>
-      <div>https://he498.github.io/Blog/2022/09/14/JUC03-常用的辅助类及阻塞队列/</div>
+      <div>https://he498.github.io/2022/09/14/JUC03-常用的辅助类及阻塞队列/</div>
     </div>
     <div class="license-meta">
       
@@ -412,7 +412,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/JUC04-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8C%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3/" title="JUC04-线程池和函数式接口">
+                      <a href="/2022/09/14/JUC04-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%92%8C%E5%87%BD%E6%95%B0%E5%BC%8F%E6%8E%A5%E5%8F%A3/" title="JUC04-线程池和函数式接口">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">JUC04-线程池和函数式接口</span>
                         <span class="visible-mobile">上一篇</span>
@@ -422,7 +422,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/JUC02-%E9%9B%86%E5%90%88%E7%B1%BB%E4%B8%8D%E5%AE%89%E5%85%A8/" title="JUC02-集合类不安全">
+                      <a href="/2022/09/14/JUC02-%E9%9B%86%E5%90%88%E7%B1%BB%E4%B8%8D%E5%AE%89%E5%85%A8/" title="JUC02-集合类不安全">
                         <span class="hidden-mobile">JUC02-集合类不安全</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -549,8 +549,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Blog/js/events.js" ></script>
-<script  src="/Blog/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -572,7 +572,7 @@
 
 
   
-    <script  src="/Blog/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -671,7 +671,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Blog/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -679,7 +679,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Blog/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

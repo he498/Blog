@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
-  <link rel="icon" href="/Blog/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="geospatial 地理位置​	朋友的定位，附件的人，打车距离计算？ ​	将指定的地理空间位置（纬度、经度、名称）添加到指定的key中。这些数据将会存储到sorted set这样的目的是为了方便使用GEORADIUS或者GEORADIUSBYMEMBER命令对数据进行半径查询等操作。 ​	该命令以采用标准格式的参数x,y,所以经度必须在纬度之前。这些坐标的限制是可以被编入索引的，区域面积可以很接">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis03-三种特殊数据类型">
-<meta property="og:url" content="https://he498.github.io/Blog/2022/09/13/Redis03-%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:url" content="https://he498.github.io/2022/09/13/Redis03-%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="geospatial 地理位置​	朋友的定位，附件的人，打车距离计算？ ​	将指定的地理空间位置（纬度、经度、名称）添加到指定的key中。这些数据将会存储到sorted set这样的目的是为了方便使用GEORADIUS或者GEORADIUSBYMEMBER命令对数据进行半径查询等操作。 ​	该命令以采用标准格式的参数x,y,所以经度必须在纬度之前。这些坐标的限制是可以被编入索引的，区域面积可以很接">
 <meta property="og:locale" content="zh_CN">
@@ -57,12 +57,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Blog/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -71,15 +71,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/Blog/js/utils.js" ></script>
-  <script  src="/Blog/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
 
@@ -96,7 +96,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Blog/">
+    <a class="navbar-brand" href="/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -115,7 +115,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -127,7 +127,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -139,7 +139,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -151,7 +151,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -163,7 +163,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -192,7 +192,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -277,7 +277,7 @@
 <blockquote>
 <p>只有六个命令</p>
 </blockquote>
-<p><img src="/2022/09/13/Redis03-%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20220529150850302.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220529150850302"></p>
+<p><img src="/2022/09/13/Redis03-%E4%B8%89%E7%A7%8D%E7%89%B9%E6%AE%8A%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/image-20220529150850302.png" srcset="/img/loading.gif" lazyload alt="image-20220529150850302"></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#################################################################################</span><br><span class="hljs-comment"># geoadd 添加地理位置</span><br><span class="hljs-comment"># 两级无法直接添加,一般会下载城市数据,直接通过java程序一次性导入</span><br><span class="hljs-comment">#geoadd key值 经度 纬度 名称</span><br>127.0.0.1:6379&gt; geoadd china:city 116.46 39.92 beijing<br>(<span class="hljs-built_in">integer</span>) 1<br>127.0.0.1:6379&gt; geoadd china:city 121.48 31.22 shanghai<br>(<span class="hljs-built_in">integer</span>) 1<br>127.0.0.1:6379&gt; geoadd china:city 106.54 29.59 chongqing<br>(<span class="hljs-built_in">integer</span>) 1<br>127.0.0.1:6379&gt; geoadd china:city 114.07 22.62 shenzhen 113.23 23.16 guanzhou<br>(<span class="hljs-built_in">integer</span>) 2<br>127.0.0.1:6379&gt; geoadd china:city 120.19 30.26 hangzhou<br>(<span class="hljs-built_in">integer</span>) 1<br>127.0.0.1:6379&gt; geoadd china:city 108.96 34.26 xian<br>(<span class="hljs-built_in">integer</span>) 1<br><br><span class="hljs-comment">#################################################################################</span><br><span class="hljs-comment">#geopos 获取指定的城市的经度和纬度</span><br>127.0.0.1:6379&gt; GEOPOS china:city beijing chongqing<br>1) 1) <span class="hljs-string">&quot;116.45999997854232788&quot;</span><br>   2) <span class="hljs-string">&quot;39.9199990416181052&quot;</span><br>2) 1) <span class="hljs-string">&quot;106.54000014066696167&quot;</span><br>   2) <span class="hljs-string">&quot;29.58999896356930748&quot;</span><br><span class="hljs-comment">#################################################################################</span><br><span class="hljs-comment">#geodist 两人之间的距离    #geodist key member1 member2 [m/km/mi/ft]</span><br><span class="hljs-comment"># 指定单位的参数 unit 必须是以下单位的其中一个：</span><br><span class="hljs-comment">#  m 表示单位为米。</span><br><span class="hljs-comment">#  km 表示单位为千米。</span><br><span class="hljs-comment">#  mi 表示单位为英里。</span><br><span class="hljs-comment">#  ft 表示单位为英尺。</span><br><br>127.0.0.1:6379&gt; GEODIST china:city shanghai beijing km<br><span class="hljs-string">&quot;1068.4581&quot;</span><br>127.0.0.1:6379&gt; GEODIST china:city guanzhou hangzhou km<br><span class="hljs-string">&quot;1049.1200&quot;</span><br><span class="hljs-comment">#################################################################################</span><br><span class="hljs-comment"># 附近的人?(获得所有附件的人的地址)通过半径来查询</span><br><span class="hljs-comment"># GEORADIUS key 经度 维度 半径 单位</span><br><br><br>127.0.0.1:6379&gt; GEORADIUS china:city 110 30 1000 km  <span class="hljs-comment">#以经度110纬度30为中心半径1000km查询附近                                                       的城市</span><br>1) <span class="hljs-string">&quot;chongqing&quot;</span><br>2) <span class="hljs-string">&quot;xian&quot;</span><br>3) <span class="hljs-string">&quot;guanzhou&quot;</span><br>4) <span class="hljs-string">&quot;shenzhen&quot;</span><br>5) <span class="hljs-string">&quot;hangzhou&quot;</span><br>127.0.0.1:6379&gt; GEORADIUS china:city 110 30 500 km <span class="hljs-comment">#以经度110纬度30为中心半径500km查询附近城市 </span><br>1) <span class="hljs-string">&quot;chongqing&quot;</span><br>2) <span class="hljs-string">&quot;xian&quot;</span><br>127.0.0.1:6379&gt; GEORADIUS china:city 110 30 500 km withdist <span class="hljs-comment">#以经度110纬度30为中心半径500km查                                                              询附近城市并带有直线距离输出 </span><br>1) 1) <span class="hljs-string">&quot;chongqing&quot;</span><br>   2) <span class="hljs-string">&quot;337.0554&quot;</span><br>2) 1) <span class="hljs-string">&quot;xian&quot;</span><br>   2) <span class="hljs-string">&quot;483.8340&quot;</span><br>127.0.0.1:6379&gt; GEORADIUS china:city 110 30 500 km withcoord <span class="hljs-comment">#以经度110纬度30为中心半径500km                                                                查询附近城市并带有经纬度输出</span><br>1) 1) <span class="hljs-string">&quot;chongqing&quot;</span><br>   2) 1) <span class="hljs-string">&quot;106.54000014066696167&quot;</span><br>      2) <span class="hljs-string">&quot;29.58999896356930748&quot;</span><br>2) 1) <span class="hljs-string">&quot;xian&quot;</span><br>   2) 1) <span class="hljs-string">&quot;108.96000176668167114&quot;</span><br>      2) <span class="hljs-string">&quot;34.25999964418929977&quot;</span><br>127.0.0.1:6379&gt; GEORADIUS china:city 110 30 500 km withcoord count 1 <br><span class="hljs-comment"># 以经度110纬度30为中心半径500km查询指定个数的数量(count 1)查询1个</span><br>1) 1) <span class="hljs-string">&quot;chongqing&quot;</span><br>   2) 1) <span class="hljs-string">&quot;106.54000014066696167&quot;</span><br>      2) <span class="hljs-string">&quot;29.58999896356930748&quot;</span><br>127.0.0.1:6379&gt; GEORADIUS china:city 110 30 500 km withcoord count 2<br>1) 1) <span class="hljs-string">&quot;chongqing&quot;</span><br>   2) 1) <span class="hljs-string">&quot;106.54000014066696167&quot;</span><br>      2) <span class="hljs-string">&quot;29.58999896356930748&quot;</span><br>2) 1) <span class="hljs-string">&quot;xian&quot;</span><br>   2) 1) <span class="hljs-string">&quot;108.96000176668167114&quot;</span><br>      2) <span class="hljs-string">&quot;34.25999964418929977&quot;</span><br>127.0.0.1:6379&gt; GEORADIUS china:city 110 30 500 km withcoord count 3<br>1) 1) <span class="hljs-string">&quot;chongqing&quot;</span><br>   2) 1) <span class="hljs-string">&quot;106.54000014066696167&quot;</span><br>      2) <span class="hljs-string">&quot;29.58999896356930748&quot;</span><br>2) 1) <span class="hljs-string">&quot;xian&quot;</span><br>   2) 1) <span class="hljs-string">&quot;108.96000176668167114&quot;</span><br>      2) <span class="hljs-string">&quot;34.25999964418929977&quot;</span><br><span class="hljs-comment">#################################################################################</span><br><span class="hljs-comment"># GEORADIUSBYMEMBER 以给定位置元素为中心查询指定半径内的其他元素</span><br>127.0.0.1:6379&gt; GEORADIUSBYMEMBER china:city beijing 1000 km<br>1) <span class="hljs-string">&quot;beijing&quot;</span><br>2) <span class="hljs-string">&quot;xian&quot;</span><br>127.0.0.1:6379&gt; GEORADIUSBYMEMBER china:city hangzhou 1500 km<br>1) <span class="hljs-string">&quot;chongqing&quot;</span><br>2) <span class="hljs-string">&quot;xian&quot;</span><br>3) <span class="hljs-string">&quot;guanzhou&quot;</span><br>4) <span class="hljs-string">&quot;shenzhen&quot;</span><br>5) <span class="hljs-string">&quot;hangzhou&quot;</span><br>6) <span class="hljs-string">&quot;shanghai&quot;</span><br>7) <span class="hljs-string">&quot;beijing&quot;</span><br>127.0.0.1:6379&gt; GEORADIUSBYMEMBER china:city hangzhou 1000 km withcoord<br>1) 1) <span class="hljs-string">&quot;hangzhou&quot;</span><br>   2) 1) <span class="hljs-string">&quot;120.18999785184860229&quot;</span><br>      2) <span class="hljs-string">&quot;30.25999927289620928&quot;</span><br>2) 1) <span class="hljs-string">&quot;shanghai&quot;</span><br>   2) 1) <span class="hljs-string">&quot;121.48000091314315796&quot;</span><br>      2) <span class="hljs-string">&quot;31.21999956478423854&quot;</span><br>127.0.0.1:6379&gt; GEORADIUSBYMEMBER china:city hangzhou 1000 km withdist <br>1) 1) <span class="hljs-string">&quot;hangzhou&quot;</span><br>   2) <span class="hljs-string">&quot;0.0000&quot;</span><br>2) 1) <span class="hljs-string">&quot;shanghai&quot;</span><br>   2) <span class="hljs-string">&quot;163.1223&quot;</span><br>127.0.0.1:6379&gt; GEORADIUSBYMEMBER china:city hangzhou 1000 km count 1<br>1) <span class="hljs-string">&quot;hangzhou&quot;</span><br><br><span class="hljs-comment">#################################################################################</span><br><span class="hljs-comment">#GEOHASH</span><br><span class="hljs-comment"># 该命令将返回11个字符的Geohash字符串，所以没有精度Geohash，损失相比，使用内部52位表示。返回的geohashes具有以下特性：</span><br><br><span class="hljs-comment"># 他们可以缩短从右边的字符。它将失去精度，但仍将指向同一地区。</span><br><span class="hljs-comment"># 它可以在 geohash.org 网站使用，网址 http://geohash.org/&lt;geohash-string&gt;。查询例子：</span><br><span class="hljs-comment"># http://geohash.org/sqdtr74hyu0.</span><br><span class="hljs-comment"># 与类似的前缀字符串是附近，但相反的是不正确的，这是可能的，用不同的前缀字符串附近。</span><br><br><span class="hljs-comment">#将二维的经纬度转换为一维的字符串,如果两个字符串越接近则距离越接近</span><br>127.0.0.1:6379&gt; geohash china:city beijing chongqing<br>1) <span class="hljs-string">&quot;wx4g455wfe0&quot;</span><br>2) <span class="hljs-string">&quot;wm7b26sn1z0&quot;</span><br><br><br><br></code></pre></td></tr></table></figure>
 
 <p>GEO的底层实现原理其实就是Zset,可以用Zset命令来操作</p>
@@ -313,7 +313,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/Blog/tags/Redis/">#Redis</a>
+        <a href="/tags/Redis/">#Redis</a>
       
     </div>
   
@@ -326,7 +326,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Redis03-三种特殊数据类型</div>
-      <div>https://he498.github.io/Blog/2022/09/13/Redis03-三种特殊数据类型/</div>
+      <div>https://he498.github.io/2022/09/13/Redis03-三种特殊数据类型/</div>
     </div>
     <div class="license-meta">
       
@@ -370,7 +370,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Blog/2022/09/13/Redis04-%E4%BA%8B%E5%8A%A1/" title="Redis04-事务">
+                      <a href="/2022/09/13/Redis04-%E4%BA%8B%E5%8A%A1/" title="Redis04-事务">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Redis04-事务</span>
                         <span class="visible-mobile">上一篇</span>
@@ -380,7 +380,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Blog/2022/09/13/Redis02-%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="Redis02-五大数据类型">
+                      <a href="/2022/09/13/Redis02-%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="Redis02-五大数据类型">
                         <span class="hidden-mobile">Redis02-五大数据类型</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -507,8 +507,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Blog/js/events.js" ></script>
-<script  src="/Blog/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -530,7 +530,7 @@
 
 
   
-    <script  src="/Blog/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -629,7 +629,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Blog/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -637,7 +637,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Blog/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

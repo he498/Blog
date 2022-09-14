@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
-  <link rel="icon" href="/Blog/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="Redis配置 1、配置文件对大小写不敏感  包含多个文件    网络  1234bind 127.0.0.1 #绑定的ipprotected-mode yes #保护模式port 6379 #端口设置   通用设置  1234567891011121314151617181920daemonize yes # 以守护进程的方式运行，默认是no，需要开启为yes！pidfile &#x2F;var&#x2F;run&#x2F;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis05-配置详解">
-<meta property="og:url" content="https://he498.github.io/Blog/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:url" content="https://he498.github.io/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="Redis配置 1、配置文件对大小写不敏感  包含多个文件    网络  1234bind 127.0.0.1 #绑定的ipprotected-mode yes #保护模式port 6379 #端口设置   通用设置  1234567891011121314151617181920daemonize yes # 以守护进程的方式运行，默认是no，需要开启为yes！pidfile &#x2F;var&#x2F;run&#x2F;">
 <meta property="og:locale" content="zh_CN">
@@ -62,12 +62,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Blog/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -76,15 +76,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/Blog/js/utils.js" ></script>
-  <script  src="/Blog/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
 
@@ -101,7 +101,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Blog/">
+    <a class="navbar-brand" href="/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -120,7 +120,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -132,7 +132,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -144,7 +144,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -156,7 +156,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -168,7 +168,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -197,7 +197,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -271,12 +271,12 @@
             
               <div class="markdown-body">
                 
-                <h1 id="Redis配置"><a href="#Redis配置" class="headerlink" title="Redis配置"></a>Redis配置</h1><p><img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601152156778.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220601152156778"></p>
+                <h1 id="Redis配置"><a href="#Redis配置" class="headerlink" title="Redis配置"></a>Redis配置</h1><p><img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601152156778.png" srcset="/img/loading.gif" lazyload alt="image-20220601152156778"></p>
 <p>1、配置文件对大小写不敏感</p>
 <blockquote>
 <p>包含多个文件</p>
 </blockquote>
-<p><img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601152242910-16630819767187.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220601152242910"></p>
+<p><img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601152242910-16630819767187.png" srcset="/img/loading.gif" lazyload alt="image-20220601152242910"></p>
 <blockquote>
 <p>网络</p>
 </blockquote>
@@ -296,11 +296,11 @@
 <blockquote>
 <p>主从复制</p>
 </blockquote>
-<p><img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601153345567.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220601153345567"></p>
+<p><img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601153345567.png" srcset="/img/loading.gif" lazyload alt="image-20220601153345567"></p>
 <blockquote>
 <p>SECURITY</p>
 </blockquote>
-<p><img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601153710913-16630821032079.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220601153710913"></p>
+<p><img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601153710913-16630821032079.png" srcset="/img/loading.gif" lazyload alt="image-20220601153710913"></p>
 <figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs accesslog"><span class="hljs-number">127.0.0.1:6379</span>&gt; config get requirepass<br><span class="hljs-number">1</span>) <span class="hljs-string">&quot;requirepass&quot;</span><br><span class="hljs-number">2</span>) <span class="hljs-string">&quot;&quot;</span><br><span class="hljs-number">27.0.0.1:6379</span>&gt; config set requirepass <span class="hljs-string">&quot;123456&#x27;</span><br></code></pre></td></tr></table></figure>
 
 
@@ -308,7 +308,7 @@
 <blockquote>
 <p>限制CLIENTS </p>
 </blockquote>
-<p><img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601154046427.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220601154046427"></p>
+<p><img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601154046427.png" srcset="/img/loading.gif" lazyload alt="image-20220601154046427"></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">maxclients 10000 <span class="hljs-comment"># 最大客户端数量</span><br>maxmemory &lt;bytes&gt;  <span class="hljs-comment">#redis 配置最大的内存容量 </span><br>maxmemory-policy noeviction  <span class="hljs-comment">#内存到达上限之后的处理策略</span><br></code></pre></td></tr></table></figure>
 
 
@@ -316,7 +316,7 @@
 <blockquote>
 <p>APPEND ONLY MODE</p>
 </blockquote>
-<p> <img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601154427250.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220601154427250"></p>
+<p> <img src="/2022/09/13/Redis05-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3/image-20220601154427250.png" srcset="/img/loading.gif" lazyload alt="image-20220601154427250"></p>
 <p>AOF配置</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">appendonly no <span class="hljs-comment"># 默认是不开启aof模式 ,默认使用的是rdb持久化的</span><br>appendfilename <span class="hljs-string">&quot;appendonly.aof&quot;</span> <span class="hljs-comment">#持久化文件的名字</span><br><span class="hljs-comment"># appendfsync always  每次修改都会sync。消耗性能</span><br>appendfsync everysec  <span class="hljs-comment"># 每秒执行一次同步 sync,可能会丢失这1s 的数据</span><br><span class="hljs-comment"># appendfsync no  不执行sync,这个时候操作系统自己同步，速度最快</span><br></code></pre></td></tr></table></figure>
 
@@ -332,7 +332,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/Blog/tags/Redis/">#Redis</a>
+        <a href="/tags/Redis/">#Redis</a>
       
     </div>
   
@@ -345,7 +345,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Redis05-配置详解</div>
-      <div>https://he498.github.io/Blog/2022/09/13/Redis05-配置详解/</div>
+      <div>https://he498.github.io/2022/09/13/Redis05-配置详解/</div>
     </div>
     <div class="license-meta">
       
@@ -389,7 +389,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Blog/2022/09/13/Redis06-%E6%8C%81%E4%B9%85%E5%8C%96/" title="Redis06-持久化">
+                      <a href="/2022/09/13/Redis06-%E6%8C%81%E4%B9%85%E5%8C%96/" title="Redis06-持久化">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Redis06-持久化</span>
                         <span class="visible-mobile">上一篇</span>
@@ -399,7 +399,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Blog/2022/09/13/Redis04-%E4%BA%8B%E5%8A%A1/" title="Redis04-事务">
+                      <a href="/2022/09/13/Redis04-%E4%BA%8B%E5%8A%A1/" title="Redis04-事务">
                         <span class="hidden-mobile">Redis04-事务</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -526,8 +526,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Blog/js/events.js" ></script>
-<script  src="/Blog/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -549,7 +549,7 @@
 
 
   
-    <script  src="/Blog/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -648,7 +648,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Blog/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -656,7 +656,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Blog/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
-  <link rel="icon" href="/Blog/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="4、垃圾回收机制什么是垃圾？ &#x3D;&gt; 垃圾是指在运行程序中没有任何指针指向的对象，这个对象就是需要被回收的垃圾。 如果不及时对内存中的垃圾进行清理，那么，这些垃圾对象所占的内存空 间会一直保留到应用程序结束，被保留的空间无法被其他对象使用。甚至可能导致内存溢出。 垃圾收集，不是Java语言的伴生产物。早在1960年，第一门开始使用内存动态分配和垃圾收集技术的Lisp语言诞生。  关于">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM06-垃圾回收机制">
-<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/index.html">
+<meta property="og:url" content="https://he498.github.io/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="4、垃圾回收机制什么是垃圾？ &#x3D;&gt; 垃圾是指在运行程序中没有任何指针指向的对象，这个对象就是需要被回收的垃圾。 如果不及时对内存中的垃圾进行清理，那么，这些垃圾对象所占的内存空 间会一直保留到应用程序结束，被保留的空间无法被其他对象使用。甚至可能导致内存溢出。 垃圾收集，不是Java语言的伴生产物。早在1960年，第一门开始使用内存动态分配和垃圾收集技术的Lisp语言诞生。  关于">
 <meta property="og:locale" content="zh_CN">
@@ -65,12 +65,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Blog/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -79,15 +79,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/Blog/js/utils.js" ></script>
-  <script  src="/Blog/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
 
@@ -104,7 +104,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Blog/">
+    <a class="navbar-brand" href="/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -123,7 +123,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -135,7 +135,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -147,7 +147,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -159,7 +159,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -171,7 +171,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -200,7 +200,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -311,7 +311,7 @@
 <li>较少收集老年区</li>
 <li>基本不动方法区（Perm&#x2F;元空间）</li>
 </ul>
-<img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902010935114.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902010935114" style="zoom:67%;">
+<img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902010935114.png" srcset="/img/loading.gif" lazyload alt="image-20220902010935114" style="zoom:67%;">
 
 
 
@@ -331,7 +331,7 @@
 <li>每次赋值都需要更新计数器，伴随着加法和减法操作，这增加了时间开销。</li>
 <li>引用计数器有一个严重的问题，即无法处理循环引用的情况。这是一 条致命缺陷，导致&#x3D;&#x3D;在Java的垃圾回收器中没有使用这类算法&#x3D;&#x3D;。</li>
 </ul>
-<img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902090839469.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902090839469" style="zoom:80%;">
+<img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902090839469.png" srcset="/img/loading.gif" lazyload alt="image-20220902090839469" style="zoom:80%;">
 
 <p><strong>可达性分析算法&#x2F;追踪性垃圾收集</strong></p>
 <p>​	相对于引用计数而言，可达性分析算法解决了循环引用的问题。防止了内存泄露的发生。</p>
@@ -340,7 +340,7 @@
 <li>使用可达性分析算法之后，内存中存活的对象都会被根对象集合直接或者间接连接，<strong>搜索走过的路径叫做引用链</strong>。</li>
 <li>如果目标对象没有任何引用链相连，则表示不可达，为垃圾。</li>
 </ul>
-<p><img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902091145167.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902091145167"></p>
+<p><img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902091145167.png" srcset="/img/loading.gif" lazyload alt="image-20220902091145167"></p>
 <p><strong>其中，Java语言中，GCRoots包括以下几类元素</strong></p>
 <ul>
 <li>各个线程被调用的方法中的参数，&#x3D;&#x3D;局部变量&#x3D;&#x3D;</li>
@@ -362,7 +362,7 @@
 <li>除了这些固定的GCRoots集合以外，根据用户所选用的垃圾收集器以及当前回收的内存区域不同，还可以有其他对象“临时性”地加入，共同构成完整GC Roots集合。比如：分代收集和局部回收（Partial GC）。</li>
 <li>如果只针对Java堆中的某一块区域进行垃圾回收（比如：典型的只针 对新生代）， 必须考虑到内存区域是虚拟机自己的实现细节，更不是孤立封闭的， 这个区域的对象完全有可能被其他区域的对象所引用，这时候就需要一.并将关联的区域对象也加入GC Roots集合中去考虑，才能保证可达性分析的准确性。</li>
 </ul>
-<p><img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902091331282.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902091331282"></p>
+<p><img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902091331282.png" srcset="/img/loading.gif" lazyload alt="image-20220902091331282"></p>
 <h5 id="对象的finalization机制"><a href="#对象的finalization机制" class="headerlink" title="对象的finalization机制"></a>对象的finalization机制</h5><p>&#x3D;&gt;</p>
 <ul>
 <li>Java语言提供了对象终止（finalization）机制来允许开发人员提供对象被销毁之前的自定义处理逻辑。</li>
@@ -407,7 +407,7 @@
 <p>&#x3D;&gt;	标记清除算法是一种非常基础和常见的垃圾收集算法</p>
 <p><strong>执行过程：</strong></p>
 <p>​	当堆中的有效内存空间被耗尽时，就会停止程序STW，然后进行标记-清除</p>
-<img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902092101317.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902092101317" style="zoom:67%;">
+<img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902092101317.png" srcset="/img/loading.gif" lazyload alt="image-20220902092101317" style="zoom:67%;">
 
 <p><strong>标记</strong>：Collector从引用的根节点开始遍历，标记所有的被引用的对象，在对象的对象头中记录为可达对象。</p>
 <p><strong>清除</strong>：将对象头中没有标记为可达对象的对象进行清除。</p>
@@ -423,7 +423,7 @@
 <p>&#x3D;&gt;	为了解决标记清除算法效率方面的问题，M.L.Minsky于1963年发表了著名的论文，“ 使用双存储区的Li sp语言垃圾收集器CALISP Garbage Collector Algorithm Using SerialSecondary Storage ）”。M.L. Minsky在该论文中描述的算法被人们称为复制（Copying）算法，它也被M. L.Minsky本人成功地引入到了Lisp语言的一个实现版本中。</p>
 <p><strong>执行过程：</strong></p>
 <p>​	将活着的内存空间分为两块，每次使用一块，进行垃圾回收的时候，将存活对象复制到另一块未使用的区域，然后将源区域清空，然后交换两个内存的角色</p>
-<img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902092505559.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902092505559" style="zoom:67%;">
+<img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902092505559.png" srcset="/img/loading.gif" lazyload alt="image-20220902092505559" style="zoom:67%;">
 
 <p><strong>优点：</strong></p>
 <ul>
@@ -445,7 +445,7 @@
 <li>第二阶段将所有的存活对象压缩到内存的一端，按顺序排放。</li>
 <li>之后，清理边界外所有的空间。</li>
 </ul>
-<img src="https://images-1301128659.cos.ap-beijing.myqcloud.com/MacBookPro202208051421544.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20210704140307884" style="zoom:67%;">
+<img src="https://images-1301128659.cos.ap-beijing.myqcloud.com/MacBookPro202208051421544.png" srcset="/img/loading.gif" lazyload alt="image-20210704140307884" style="zoom:67%;">
 
 <blockquote>
 <p>​	标记一压缩算法的最终效果等同于标记一清除算法执行完成后，再进行一次内存碎片整理，因此，也可以把它称为标记一清除一压缩（Mark一 Sweep一Compact）算法。</p>
@@ -621,7 +621,7 @@
 <p>并发较强的CPU 多条GC</p>
 </li>
 </ul>
-<p><img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902171723082.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902171723082"></p>
+<p><img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902171723082.png" srcset="/img/loading.gif" lazyload alt="image-20220902171723082"></p>
 <p><strong>2.按照工作模式</strong></p>
 <ul>
 <li><p><strong>并发式垃圾回收器</strong></p>
@@ -665,7 +665,7 @@
 <li>并行回收器：ParNew、Parallel Scavenge.、Parallel Old</li>
 <li>并发回收器：CMS.、G1</li>
 </ul>
-<p><img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902172535515.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902172535515"></p>
+<p><img src="/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/image-20220902172535515.png" srcset="/img/loading.gif" lazyload alt="image-20220902172535515"></p>
 
                 
               </div>
@@ -678,7 +678,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/Blog/tags/JVM/">#JVM</a>
+        <a href="/tags/JVM/">#JVM</a>
       
     </div>
   
@@ -691,7 +691,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JVM06-垃圾回收机制</div>
-      <div>https://he498.github.io/Blog/2022/09/14/JVM06-垃圾回收机制/</div>
+      <div>https://he498.github.io/2022/09/14/JVM06-垃圾回收机制/</div>
     </div>
     <div class="license-meta">
       
@@ -735,7 +735,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/JVM07-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="JVM07-性能优化">
+                      <a href="/2022/09/14/JVM07-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="JVM07-性能优化">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">JVM07-性能优化</span>
                         <span class="visible-mobile">上一篇</span>
@@ -745,7 +745,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" title="JVM05-执行引擎">
+                      <a href="/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/" title="JVM05-执行引擎">
                         <span class="hidden-mobile">JVM05-执行引擎</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -872,8 +872,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Blog/js/events.js" ></script>
-<script  src="/Blog/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -895,7 +895,7 @@
 
 
   
-    <script  src="/Blog/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -994,7 +994,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Blog/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -1002,7 +1002,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Blog/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

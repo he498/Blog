@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
-  <link rel="icon" href="/Blog/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="2、运行时数据区内部结构一个进程对应一个jvm实例，一个运行时数据区，又包含多个线程，这些线程共享了方法区和堆，每个线程包含了程序计数器、本地方法栈和虚拟机栈 （JDK8以后方法区对应为元数据区）  **关于内存&#x3D;&gt; ** 内存是非常重要的系统资源，是硬盘和cpu的中间仓库及桥梁，承载着操作系统和应用程序的实时运行。JVM内存布局规定了JAVA在运行过程中内存申请、分配、管理的策略">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM03-运行时数据区">
-<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/index.html">
+<meta property="og:url" content="https://he498.github.io/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="2、运行时数据区内部结构一个进程对应一个jvm实例，一个运行时数据区，又包含多个线程，这些线程共享了方法区和堆，每个线程包含了程序计数器、本地方法栈和虚拟机栈 （JDK8以后方法区对应为元数据区）  **关于内存&#x3D;&gt; ** 内存是非常重要的系统资源，是硬盘和cpu的中间仓库及桥梁，承载着操作系统和应用程序的实时运行。JVM内存布局规定了JAVA在运行过程中内存申请、分配、管理的策略">
 <meta property="og:locale" content="zh_CN">
@@ -68,12 +68,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Blog/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -82,15 +82,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/Blog/js/utils.js" ></script>
-  <script  src="/Blog/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
 
@@ -107,7 +107,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Blog/">
+    <a class="navbar-brand" href="/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -126,7 +126,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -138,7 +138,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -150,7 +150,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -162,7 +162,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -174,7 +174,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -203,7 +203,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -279,14 +279,14 @@
                 
                 <h2 id="2、运行时数据区"><a href="#2、运行时数据区" class="headerlink" title="2、运行时数据区"></a>2、运行时数据区</h2><h4 id="内部结构"><a href="#内部结构" class="headerlink" title="内部结构"></a>内部结构</h4><p>一个进程对应一个jvm实例，一个运行时数据区，又包含多个线程，这些线程共享了方法区和堆，每个线程包含了程序计数器、本地方法栈和虚拟机栈</p>
 <p>（JDK8以后方法区对应为元数据区）</p>
-<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220827182925885.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220827182925885"></p>
+<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220827182925885.png" srcset="/img/loading.gif" lazyload alt="image-20220827182925885"></p>
 <p>**关于内存&#x3D;&gt; ** 内存是非常重要的系统资源，是硬盘和cpu的中间仓库及桥梁，承载着操作系统和应用程序的实时运行。JVM内存布局规定了JAVA在运行过程中内存申请、分配、管理的策略，保证了JVM的高效稳定运行。不同的jvm对于内存的划分方式和管理机制存在着部分差异（对于Hotspot主要指方法区）</p>
 <h5 id="分区介绍"><a href="#分区介绍" class="headerlink" title="分区介绍"></a>分区介绍</h5><p>​	java虚拟机定了若干种程序运行期间会使用到的运行时数据区</p>
 <ul>
 <li>有一些会随着虚拟机启动而创建，随着虚拟机退出而销毁，红色区域部分</li>
 <li>另外一些则是与线程一一对应，这些与线程对应的数据区域会随着线程开始和结束而创建和销毁，灰色部分</li>
 </ul>
-<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220827183720659.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220827183720659"></p>
+<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220827183720659.png" srcset="/img/loading.gif" lazyload alt="image-20220827183720659"></p>
 <p>每一个JVM实例都对应一个Runtime实例，即运行时环境。相当于上图中的框内部分。</p>
 <h5 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h5><ul>
 <li>线程是一个程序里的运行单元，JVM允许一个程序有多个线程并行的执行；</li>
@@ -305,7 +305,7 @@
 </ul>
 <h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><p>&#x3D;&gt;	JVM中的程序计数寄存器（Program Counter Register），Register的命名源于CPU的寄存器，寄存器存储指令相关的现场信息。CPU只有把数据装载到寄存器才能够运行。JVM中的PC寄存器是对物理PC寄存器的一种抽象模拟。</p>
 <p><strong>作用：</strong>PC寄存器是用来存储指向下一条指令的地址，也即将将要执行的指令代码。由执行引擎读取下一条指令。</p>
-<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828024257880.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828024257880"></p>
+<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828024257880.png" srcset="/img/loading.gif" lazyload alt="image-20220828024257880"></p>
 <p><strong>特征：</strong></p>
 <ul>
 <li>它是一块很小的内存空间，几乎可以忽略不计。也是运行速度最快的存储区域。</li>
@@ -353,7 +353,7 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Test</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">Test</span>().test();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test</span><span class="hljs-params">()</span>&#123;<br>        a();<br>    &#125;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">a</span><span class="hljs-params">()</span>&#123;<br>        test();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828030606283.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828030606283"></p>
+<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828030606283.png" srcset="/img/loading.gif" lazyload alt="image-20220828030606283"></p>
 <h5 id="设置栈内存大小"><a href="#设置栈内存大小" class="headerlink" title="设置栈内存大小"></a><strong>设置栈内存大小</strong></h5><p>​	我们可以使用参数-Xss选项来设置线程的最大栈空间，栈的大小直接决定了函数调用的最大可达深度。 （IDEA设置方法：Run-EditConfigurations-VM options 填入指定栈的大小-Xss256k）</p>
 <h5 id="栈的运行原理"><a href="#栈的运行原理" class="headerlink" title="栈的运行原理"></a>栈的运行原理</h5><ul>
 <li>每个线程都有自己的栈，栈中的数据都是以**栈帧(Stack Frame)**的格式存在</li>
@@ -367,7 +367,7 @@
 <li>如果当前方法调用了其他方法，方法返回之际，当前栈帧会传回此方法的执行结果给前一个栈帧，接着，虚拟机会丢弃当前栈帧，使得前一个栈帧重新成为当前栈帧</li>
 <li>Java方法有两种返回函数的方式，一种是正常的函数返回，使用return指令；另外一种是抛出异常。不管使用哪种方式，都会导致栈帧被弹出。</li>
 </ul>
-<h5 id="栈帧内部结构"><a href="#栈帧内部结构" class="headerlink" title="栈帧内部结构"></a>栈帧内部结构</h5><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828031037834.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828031037834" style="zoom:67%;">
+<h5 id="栈帧内部结构"><a href="#栈帧内部结构" class="headerlink" title="栈帧内部结构"></a>栈帧内部结构</h5><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828031037834.png" srcset="/img/loading.gif" lazyload alt="image-20220828031037834" style="zoom:67%;">
 
 <p>每个栈帧中存储着:</p>
 <ul>
@@ -377,7 +377,7 @@
 <li>方法返回地址(Return Address)(或方法正常退出或者异常退出的定义)</li>
 <li>一些附加信</li>
 </ul>
-<h5 id="栈帧与线程？"><a href="#栈帧与线程？" class="headerlink" title="栈帧与线程？"></a>栈帧与线程？</h5><p>&#x3D;&gt; <img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828031153654.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828031153654" style="zoom:67%;"></p>
+<h5 id="栈帧与线程？"><a href="#栈帧与线程？" class="headerlink" title="栈帧与线程？"></a>栈帧与线程？</h5><p>&#x3D;&gt; <img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828031153654.png" srcset="/img/loading.gif" lazyload alt="image-20220828031153654" style="zoom:67%;"></p>
 <p><strong>局部变量表</strong></p>
 <ul>
 <li>局部变量表也被称之为局部变量数组或本地变量表</li>
@@ -434,7 +434,7 @@
 <p>​	JVM支持着java语言本身和运行库，它是java程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。然而不管怎样，它毕竟不是一个完整的系统，它经常依赖于一些底层系统的支持。这些底层系统常常是强大的操作系统。通过使用本地方法，我们得以用java实现了jre的与底层系统的交互，甚至jvm的一些部分就是用C写的。还有，如果我们要使用一些java语言本身没有提供封装的操作系统特性时，我们也需要使用本地方法。</p>
 <p><strong>Sun’s Java</strong></p>
 <p>​	Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互。jre大部分是用java实现的，它也通过一些本地方法与外界交互。例如：类java.lang.Thread的setPriority()方法是用Java实现的，但是它实现调用的事该类里的本地方法setPriority0（）。这个本地方法是用C实现的，并被植入JVM内部，在Windows 95的平台上，这个本地方法最终将调用Win32 SetProority（）API。这是一个本地方法的具体实现由JVM直接提供，更多的情况是本地方法由外部的动态链接库（external dynamic link library）提供，然后被JVM调用。</p>
-<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828032918155.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828032918155"></p>
+<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828032918155.png" srcset="/img/loading.gif" lazyload alt="image-20220828032918155"></p>
 <p>&#x3D;&gt;</p>
 <ul>
 <li><p>Java虚拟机栈用于管理Java方法的调用，而本地方法栈用于管理本地方法的调用</p>
@@ -463,7 +463,7 @@
 <li><p>在hotSpot JVM中，直接将本地方法栈和虚拟机栈合二为一。</p>
 </li>
 </ul>
-<h4 id="三种JVM"><a href="#三种JVM" class="headerlink" title="三种JVM"></a>三种JVM</h4><p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220821151427810.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220821151427810"></p>
+<h4 id="三种JVM"><a href="#三种JVM" class="headerlink" title="三种JVM"></a>三种JVM</h4><p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220821151427810.png" srcset="/img/loading.gif" lazyload alt="image-20220821151427810"></p>
 <ul>
 <li><p>Sun公司 HotSpot   <code>Java HotSpot(TM) 64-Bit Server VM (build 25.121-b13, mixed mode)</code></p>
 </li>
@@ -509,11 +509,11 @@
 <li><p>jdk1.8之后：无永久代，常量池在元空间</p>
 </li>
 </ul>
-<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220821155621137.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220821155621137"></p>
+<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220821155621137.png" srcset="/img/loading.gif" lazyload alt="image-20220821155621137"></p>
 <p>元空间：逻辑上存在，物理上不存在。</p>
-<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828033931944.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828033931944"></p>
-<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828033948326.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828033948326"></p>
-<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828034005411.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220828034005411"></p>
+<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828033931944.png" srcset="/img/loading.gif" lazyload alt="image-20220828033931944"></p>
+<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828033948326.png" srcset="/img/loading.gif" lazyload alt="image-20220828033948326"></p>
+<p><img src="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/image-20220828034005411.png" srcset="/img/loading.gif" lazyload alt="image-20220828034005411"></p>
 
                 
               </div>
@@ -526,7 +526,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/Blog/tags/JVM/">#JVM</a>
+        <a href="/tags/JVM/">#JVM</a>
       
     </div>
   
@@ -539,7 +539,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JVM03-运行时数据区</div>
-      <div>https://he498.github.io/Blog/2022/09/14/JVM03-运行时数据区/</div>
+      <div>https://he498.github.io/2022/09/14/JVM03-运行时数据区/</div>
     </div>
     <div class="license-meta">
       
@@ -583,7 +583,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/" title="JVM04-运行时数据区02">
+                      <a href="/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/" title="JVM04-运行时数据区02">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">JVM04-运行时数据区02</span>
                         <span class="visible-mobile">上一篇</span>
@@ -593,7 +593,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/" title="JVM02-类加载子系统">
+                      <a href="/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/" title="JVM02-类加载子系统">
                         <span class="hidden-mobile">JVM02-类加载子系统</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -720,8 +720,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Blog/js/events.js" ></script>
-<script  src="/Blog/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -743,7 +743,7 @@
 
 
   
-    <script  src="/Blog/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -842,7 +842,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Blog/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -850,7 +850,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Blog/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
-  <link rel="icon" href="/Blog/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="ES核心概念&#x3D;&gt;	集群、节点、索引、类型、文档、分片、映射？ Elasticsearch是面向文档 关系型数据库与elasticsearch 的对比    Relational DB Elasticsearch    数据库(database) 索引(indices)   表(tables) types   行(rows) documents   字段(columns) field">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ES02-ES核心概念及IK分词器">
-<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/index.html">
+<meta property="og:url" content="https://he498.github.io/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="ES核心概念&#x3D;&gt;	集群、节点、索引、类型、文档、分片、映射？ Elasticsearch是面向文档 关系型数据库与elasticsearch 的对比    Relational DB Elasticsearch    数据库(database) 索引(indices)   表(tables) types   行(rows) documents   字段(columns) field">
 <meta property="og:locale" content="zh_CN">
@@ -66,12 +66,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Blog/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -80,15 +80,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/Blog/js/utils.js" ></script>
-  <script  src="/Blog/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
 
@@ -105,7 +105,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Blog/">
+    <a class="navbar-brand" href="/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -124,7 +124,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -136,7 +136,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -148,7 +148,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -160,7 +160,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -172,7 +172,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -201,7 +201,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -306,7 +306,7 @@
 <p><strong>物理设计</strong></p>
 <p>elasticsearch在后台把每个<strong>索引划分成多个分片</strong>，每份分片可以在集群中的不同服务迁移。</p>
 <p>一个人就是一个集群!	默认的集群名称就是elaticsearch</p>
-<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904152733037.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904152733037"></p>
+<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904152733037.png" srcset="/img/loading.gif" lazyload alt="image-20220904152733037"></p>
 <p><strong>逻辑设计</strong></p>
 <p>一个索引类型中，包含多个文档，比如文档1、文档2。当我们索引一篇文章时可以通过这样的一个顺序找到它：索引-&gt;类型-&gt;文档ID，通过这个组合我们就能索引到某个具体的文档。</p>
 <p>注意：ID不必是整数，实际上它是个字符串</p>
@@ -325,7 +325,7 @@
 <p>索引是映射类型的容器，elasticsearch中的索引是一个非常大的文档集合。索引存储了映射类型的字段和其他设置。然后它们被存储到了各个分片上了。我们来研究下分片是如何工作的。</p>
 <p><strong>物理设计 ：节点和分片如何工作	&#x3D;&gt;</strong></p>
 <p>一个集群至少有一个节点，而一个节点就是一个elasticsearch进程，节点可以有多个索引默认的，如果你创建索引，那么索引将会有5个分片(primary shard，又称主分片)构成的，每一个主分片会有一个副本（replica shard,又称复制分片）</p>
-<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904154508395.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904154508395"></p>
+<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904154508395.png" srcset="/img/loading.gif" lazyload alt="image-20220904154508395"></p>
 <p>上图是一个有3个节点的集群，可以看到主分片和对应的复制分片都不会在同一个节点内，这样有利于某个节点挂掉了，数据也不至于丢失。实际上，一个分片是一个Lucene索引，一个包含倒排索引的文件目录，倒排索引的结构使得elasticsearch在不扫描全部文档的情况下，就能告诉你哪些文档包含特定的关键字。</p>
 <p><strong>倒排索引？</strong></p>
 <p>&#x3D;&gt;	elasticsearch使用的是一种称为倒排索引的结构，采用Lucene倒排索引作为底层。这种结构适用于快速的全文搜索，一个索引由文档中所有不重复的列表构成，对于每一个词，都有包含他的文档列表。</p>
@@ -418,7 +418,7 @@
 </tr>
 </tbody></table>
 <p>两个文档都匹配，但是第一个文档比第二个匹配度更高。如果没有别的条件，现在这两个关键字的文档都将返回。</p>
-<img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904160432608.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904160432608" style="zoom: 67%;">
+<img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904160432608.png" srcset="/img/loading.gif" lazyload alt="image-20220904160432608" style="zoom: 67%;">
 
 <p>如果要搜索含有python标签的文章，那相对于查找所有原始数据而言，查找倒排索引的数据将会快的多。只需要查看标签这一栏，然后获取相关文章ID即可。</p>
 <blockquote>
@@ -431,26 +431,26 @@
 <p><strong>安装</strong></p>
 <p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/medcl/elasticsearch-analysis-ik/releases">https://github.com/medcl/elasticsearch-analysis-ik/releases</a></p>
 <p>下载完成后解压放入es的plugins中</p>
-<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904164851191.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904164851191"></p>
+<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904164851191.png" srcset="/img/loading.gif" lazyload alt="image-20220904164851191"></p>
 <p>重启ES即可</p>
-<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904165042690.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904165042690"></p>
+<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904165042690.png" srcset="/img/loading.gif" lazyload alt="image-20220904165042690"></p>
 <p>elasticsearch-plugin list可以通过这个命令来查看加载进来的插件</p>
-<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904165335867.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904165335867"></p>
+<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904165335867.png" srcset="/img/loading.gif" lazyload alt="image-20220904165335867"></p>
 <p><strong>使用Kibana测试</strong></p>
 <p>查看不同的分词效果</p>
 <ul>
 <li>ik_smart</li>
 </ul>
-<img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904165747064.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904165747064" style="zoom:80%;">
+<img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904165747064.png" srcset="/img/loading.gif" lazyload alt="image-20220904165747064" style="zoom:80%;">
 
 <ul>
 <li>ik_max_word</li>
 </ul>
-<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904165837479.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904165837479"></p>
+<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904165837479.png" srcset="/img/loading.gif" lazyload alt="image-20220904165837479"></p>
 <p><strong>如果需要自己的词，就需要加到字典中</strong></p>
-<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904170738446.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904170738446"></p>
+<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904170738446.png" srcset="/img/loading.gif" lazyload alt="image-20220904170738446"></p>
 <p>重启ES测试：</p>
-<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904171044017.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904171044017"></p>
+<p><img src="/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/image-20220904171044017.png" srcset="/img/loading.gif" lazyload alt="image-20220904171044017"></p>
 <p>发现刚刚加入的词”狂神“已经加入了字典</p>
 
                 
@@ -464,7 +464,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/Blog/tags/Elasticsearch/">#Elasticsearch</a>
+        <a href="/tags/Elasticsearch/">#Elasticsearch</a>
       
     </div>
   
@@ -477,7 +477,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>ES02-ES核心概念及IK分词器</div>
-      <div>https://he498.github.io/Blog/2022/09/14/ES02-ES核心概念及IK分词器/</div>
+      <div>https://he498.github.io/2022/09/14/ES02-ES核心概念及IK分词器/</div>
     </div>
     <div class="license-meta">
       
@@ -521,7 +521,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/" title="ES03-ES基本API">
+                      <a href="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/" title="ES03-ES基本API">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">ES03-ES基本API</span>
                         <span class="visible-mobile">上一篇</span>
@@ -531,7 +531,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/ES01-ES%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" title="ES01-ES的环境配置">
+                      <a href="/2022/09/14/ES01-ES%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" title="ES01-ES的环境配置">
                         <span class="hidden-mobile">ES01-ES的环境配置</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -658,8 +658,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Blog/js/events.js" ></script>
-<script  src="/Blog/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -681,7 +681,7 @@
 
 
   
-    <script  src="/Blog/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -780,7 +780,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Blog/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -788,7 +788,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Blog/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

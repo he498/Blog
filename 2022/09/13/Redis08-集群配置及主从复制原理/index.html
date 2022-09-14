@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
-  <link rel="icon" href="/Blog/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="Redis 主从复制&#x3D;&gt;	主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点（master&#x2F;leader），后者称为从节点（slave&#x2F;follower）；数据的复制是单向的，只能由主节点到从节点。Master以写为主，Slave以读为主。 默认情况下，每台Redis服务器都是主节点，且一个主节点可以有多个从节点（或没有从节">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis08-集群配置及主从复制原理">
-<meta property="og:url" content="https://he498.github.io/Blog/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/index.html">
+<meta property="og:url" content="https://he498.github.io/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="Redis 主从复制&#x3D;&gt;	主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点（master&#x2F;leader），后者称为从节点（slave&#x2F;follower）；数据的复制是单向的，只能由主节点到从节点。Master以写为主，Slave以读为主。 默认情况下，每台Redis服务器都是主节点，且一个主节点可以有多个从节点（或没有从节">
 <meta property="og:locale" content="zh_CN">
@@ -73,12 +73,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Blog/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -87,15 +87,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/Blog/js/utils.js" ></script>
-  <script  src="/Blog/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
 
@@ -112,7 +112,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Blog/">
+    <a class="navbar-brand" href="/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -131,7 +131,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -143,7 +143,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -155,7 +155,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -167,7 +167,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -179,7 +179,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -208,7 +208,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -296,34 +296,34 @@
 <li>从结构上，单个Redis服务器会发生单点故障，并且一台服务器需要处理所有的请求负载，压力较大。</li>
 <li>从容量上，单个Redis服务器内存容量有限，就算一台Redis服务器内存容量为256G，也不能将所有内存作Redis存储内存，一般来说，单台Redis最大使用内存不应该超过20G.</li>
 </ol>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908165106157.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908165106157"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908165106157.png" srcset="/img/loading.gif" lazyload alt="image-20220908165106157"></p>
 <p>主从复制，读写分离，可以减缓服务器的压力</p>
 <h4 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h4><p>只配从库，不用配置主库</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">127.0.0.1:6379&gt; info replication   <span class="hljs-comment"># 查看当前库信息</span><br><span class="hljs-comment"># Replication</span><br>role:master     <span class="hljs-comment"># 角色  master</span><br>connected_slaves:0  <span class="hljs-comment"># 从机数量</span><br>master_failover_state:no-failover<br>master_replid:d0a7c3cdb30f3ecd8cfe160f9e3c1adb50d3959c<br>master_replid2:0000000000000000000000000000000000000000<br>master_repl_offset:0<br>second_repl_offset:-1<br>repl_backlog_active:0<br>repl_backlog_size:1048576<br>repl_backlog_first_byte_offset:0<br>repl_backlog_histlen:0<br></code></pre></td></tr></table></figure>
 
 <p><strong>配置文件配置过程</strong></p>
 <p>1、复制出三份配置文件</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908170319837.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908170319837"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908170319837.png" srcset="/img/loading.gif" lazyload alt="image-20220908170319837"></p>
 <p>2、更改主机log文件名称</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908170441727.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908170441727"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908170441727.png" srcset="/img/loading.gif" lazyload alt="image-20220908170441727"></p>
 <p>3、更改主机rdb文件名称</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908170629176.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908170629176"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908170629176.png" srcset="/img/loading.gif" lazyload alt="image-20220908170629176"></p>
 <p>4、更改从机端口号</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908170810152.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908170810152"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908170810152.png" srcset="/img/loading.gif" lazyload alt="image-20220908170810152"></p>
 <p>5、更改从机pidfile</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908170915545.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908170915545"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908170915545.png" srcset="/img/loading.gif" lazyload alt="image-20220908170915545"></p>
 <p>6、从机logfile文件名称也更改</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908171019974.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908171019974"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908171019974.png" srcset="/img/loading.gif" lazyload alt="image-20220908171019974"></p>
 <p>7、从机更改rdb文件名称</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908171110754.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908171110754"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908171110754.png" srcset="/img/loading.gif" lazyload alt="image-20220908171110754"></p>
 <p>8、6381从机与6380从机同理</p>
 <blockquote>
 <p>启动</p>
 </blockquote>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908171741971.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908171741971"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908171741971.png" srcset="/img/loading.gif" lazyload alt="image-20220908171741971"></p>
 <p>启动三个redis服务端</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908171837562.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908171837562"></p>
-<h4 id="一主二从配置"><a href="#一主二从配置" class="headerlink" title="一主二从配置"></a>一主二从配置</h4><p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908172256290.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908172256290"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908171837562.png" srcset="/img/loading.gif" lazyload alt="image-20220908171837562"></p>
+<h4 id="一主二从配置"><a href="#一主二从配置" class="headerlink" title="一主二从配置"></a>一主二从配置</h4><p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908172256290.png" srcset="/img/loading.gif" lazyload alt="image-20220908172256290"></p>
 <p>连接客户端，三台默认都是主机</p>
 <p>一主（79）二从（80、81）</p>
 <p><strong>配置从机命令：</strong></p>
@@ -335,18 +335,18 @@
 
 
 <p>在主机端查看信息：</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908172624627.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908172624627"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908172624627.png" srcset="/img/loading.gif" lazyload alt="image-20220908172624627"></p>
 <p>当两个都配置完了，这里我们可以从主机端看到两台从机端的信息了：</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908172940475.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908172940475"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908172940475.png" srcset="/img/loading.gif" lazyload alt="image-20220908172940475"></p>
 <p><strong>这种方式是使用命令的方式进行主从配置的，这种是暂时的，如果需要永久配置那么就需要在配置文件中配置！</strong></p>
 <p>配置文件的方式：</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908173354516.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908173354516"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908173354516.png" srcset="/img/loading.gif" lazyload alt="image-20220908173354516"></p>
 <p><strong>读写操作</strong></p>
 <p>主机可以写，从机不能写只能读：</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908173545572.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908173545572"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908173545572.png" srcset="/img/loading.gif" lazyload alt="image-20220908173545572"></p>
 <p>这里主机端进行写入k1，从机端也会同步</p>
 <p>从机进行写操作就会报错！</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908173657459.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908173657459"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908173657459.png" srcset="/img/loading.gif" lazyload alt="image-20220908173657459"></p>
 <p><strong>测试主机断开：</strong></p>
 <p>这时主机断开连接，从机依旧连接到主机的（在没有配置哨兵的情况下），但是没有写操作了。如果主机回来了，从机依旧可以读到主机新写入的数据。</p>
 <p><strong>测试从机断开：</strong></p>
@@ -365,7 +365,7 @@
 <p>第二种主从配置方式</p>
 </blockquote>
 <p>&#x3D;&gt;	上一个主节点连接下一个从节点</p>
-<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908175303043.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220908175303043"></p>
+<p><img src="/2022/09/13/Redis08-%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE%E5%8F%8A%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E5%8E%9F%E7%90%86/image-20220908175303043.png" srcset="/img/loading.gif" lazyload alt="image-20220908175303043"></p>
 <p>此时的80依旧是从节点。</p>
 <p>这个时候如果最前面的主节点（老大）宕机了，可以手动将设置主节点</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">SLAVEOF no one<br></code></pre></td></tr></table></figure>
@@ -384,7 +384,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/Blog/tags/Redis/">#Redis</a>
+        <a href="/tags/Redis/">#Redis</a>
       
     </div>
   
@@ -397,7 +397,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Redis08-集群配置及主从复制原理</div>
-      <div>https://he498.github.io/Blog/2022/09/13/Redis08-集群配置及主从复制原理/</div>
+      <div>https://he498.github.io/2022/09/13/Redis08-集群配置及主从复制原理/</div>
     </div>
     <div class="license-meta">
       
@@ -441,7 +441,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Blog/2022/09/13/Redis09-%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3/" title="Redis09-哨兵模式详解">
+                      <a href="/2022/09/13/Redis09-%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3/" title="Redis09-哨兵模式详解">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Redis09-哨兵模式详解</span>
                         <span class="visible-mobile">上一篇</span>
@@ -451,7 +451,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Blog/2022/09/13/Redis07-%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85/" title="Redis07-发布订阅">
+                      <a href="/2022/09/13/Redis07-%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85/" title="Redis07-发布订阅">
                         <span class="hidden-mobile">Redis07-发布订阅</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -578,8 +578,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Blog/js/events.js" ></script>
-<script  src="/Blog/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -601,7 +601,7 @@
 
 
   
-    <script  src="/Blog/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -700,7 +700,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Blog/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -708,7 +708,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Blog/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

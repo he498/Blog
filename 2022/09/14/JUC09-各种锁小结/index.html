@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
-  <link rel="icon" href="/Blog/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="各种锁1、公平锁、非公平锁公平锁：非常公平，不能够插队，必须先来后到 非公平锁：非常不公平，可以插队 1234567&#x2F;&#x2F;lock 锁默认是非公平锁public ReentranLock()&amp;#123;    sync &#x3D; new NonfairSync();&amp;#125;public ReentranLock()&amp;#123;    sync &#x3D; fair ?new FairSync():new No">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JUC09-各种锁小结">
-<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/JUC09-%E5%90%84%E7%A7%8D%E9%94%81%E5%B0%8F%E7%BB%93/index.html">
+<meta property="og:url" content="https://he498.github.io/2022/09/14/JUC09-%E5%90%84%E7%A7%8D%E9%94%81%E5%B0%8F%E7%BB%93/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="各种锁1、公平锁、非公平锁公平锁：非常公平，不能够插队，必须先来后到 非公平锁：非常不公平，可以插队 1234567&#x2F;&#x2F;lock 锁默认是非公平锁public ReentranLock()&amp;#123;    sync &#x3D; new NonfairSync();&amp;#125;public ReentranLock()&amp;#123;    sync &#x3D; fair ?new FairSync():new No">
 <meta property="og:locale" content="zh_CN">
@@ -57,12 +57,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Blog/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -71,15 +71,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/Blog/js/utils.js" ></script>
-  <script  src="/Blog/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
 
@@ -96,7 +96,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Blog/">
+    <a class="navbar-brand" href="/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -115,7 +115,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -127,7 +127,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -139,7 +139,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -151,7 +151,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -163,7 +163,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -192,7 +192,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -278,7 +278,7 @@
 
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.ming.lock;<br><br><span class="hljs-keyword">import</span> java.util.concurrent.TimeUnit;<br><br><span class="hljs-comment">//T1==&gt;mylock</span><br><span class="hljs-comment">//T2==&gt;mylock</span><br><span class="hljs-comment">//T1==&gt;myunlock</span><br><span class="hljs-comment">//T2==&gt;myunlock</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestSpinLock</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> InterruptedException &#123;<br>        <span class="hljs-type">SpinlockDemo</span> <span class="hljs-variable">lock</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SpinlockDemo</span>();<br><br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(()-&gt;&#123;<br>            lock.myLock();<br>            <span class="hljs-keyword">try</span> &#123;<br>                TimeUnit.SECONDS.sleep(<span class="hljs-number">3</span>);<br>            &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>                e.printStackTrace();<br>            &#125; <span class="hljs-keyword">finally</span> &#123;<br>                lock.myUnLock();<br>            &#125;<br><br>        &#125;,<span class="hljs-string">&quot;T1&quot;</span>).start();<br><br>        TimeUnit.SECONDS.sleep(<span class="hljs-number">1</span>);<br><br>        <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(()-&gt;&#123;<br>            lock.myLock();<br>            <span class="hljs-keyword">try</span> &#123;<br><br>            &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>                e.printStackTrace();<br>            &#125; <span class="hljs-keyword">finally</span> &#123;<br>                lock.myUnLock();<br>            &#125;<br><br>        &#125;,<span class="hljs-string">&quot;T2&quot;</span>).start();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h4 id="4、死锁排查"><a href="#4、死锁排查" class="headerlink" title="4、死锁排查"></a>4、死锁排查</h4><p><img src="/2022/09/14/JUC09-%E5%90%84%E7%A7%8D%E9%94%81%E5%B0%8F%E7%BB%93/image-20220725164042757.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220725164042757"></p>
+<h4 id="4、死锁排查"><a href="#4、死锁排查" class="headerlink" title="4、死锁排查"></a>4、死锁排查</h4><p><img src="/2022/09/14/JUC09-%E5%90%84%E7%A7%8D%E9%94%81%E5%B0%8F%E7%BB%93/image-20220725164042757.png" srcset="/img/loading.gif" lazyload alt="image-20220725164042757"></p>
 <p>死锁：<strong>在多道程序环境中，多个进程可以竞争有限数量的资源。当一个进程申请资源时，如果这时没有可用资源，那么这个进程进入等待状态。有时，如果所申请的资源被其他等待进程占有，那么该等待进程有可能再也无法改变状态。这种情况称为死锁。</strong>(即多个线程争抢有限的共享资源，线程间互相等待对方释放资源形成死循环而造成死锁)</p>
 <p>死锁的四个必要条件：</p>
 <ol>
@@ -306,7 +306,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/Blog/tags/JUC/">#JUC</a>
+        <a href="/tags/JUC/">#JUC</a>
       
     </div>
   
@@ -319,7 +319,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JUC09-各种锁小结</div>
-      <div>https://he498.github.io/Blog/2022/09/14/JUC09-各种锁小结/</div>
+      <div>https://he498.github.io/2022/09/14/JUC09-各种锁小结/</div>
     </div>
     <div class="license-meta">
       
@@ -363,7 +363,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/ES01-ES%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" title="ES01-ES的环境配置">
+                      <a href="/2022/09/14/ES01-ES%E7%9A%84%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" title="ES01-ES的环境配置">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">ES01-ES的环境配置</span>
                         <span class="visible-mobile">上一篇</span>
@@ -373,7 +373,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/" title="JUC08-CAS及原子引用">
+                      <a href="/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/" title="JUC08-CAS及原子引用">
                         <span class="hidden-mobile">JUC08-CAS及原子引用</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -500,8 +500,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Blog/js/events.js" ></script>
-<script  src="/Blog/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -523,7 +523,7 @@
 
 
   
-    <script  src="/Blog/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -622,7 +622,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Blog/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -630,7 +630,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Blog/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   

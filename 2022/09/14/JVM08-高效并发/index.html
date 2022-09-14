@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
-  <link rel="icon" href="/Blog/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,7 +19,7 @@
     <meta name="description" content="6、高效并发Java内存模型？&#x3D;&gt;	 ​	 JVM虚拟机规范中曾经试图定义一种Java内存模型，来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都可以达到一致性的内存访问效果。  然而定义这样一套内存模型并非很容易，这个模型必须足够严谨，才能让Java的并发内存访问操作不会有歧义。但是也必须足够宽松，这样使得虚拟机的具体实现能够有自由的发挥空间来利用各种硬">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM08-高效并发">
-<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/index.html">
+<meta property="og:url" content="https://he498.github.io/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="6、高效并发Java内存模型？&#x3D;&gt;	 ​	 JVM虚拟机规范中曾经试图定义一种Java内存模型，来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都可以达到一致性的内存访问效果。  然而定义这样一套内存模型并非很容易，这个模型必须足够严谨，才能让Java的并发内存访问操作不会有歧义。但是也必须足够宽松，这样使得虚拟机的具体实现能够有自由的发挥空间来利用各种硬">
 <meta property="og:locale" content="zh_CN">
@@ -62,12 +62,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/Blog/css/main.css" />
+<link  rel="stylesheet" href="/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
   
 
 
@@ -76,15 +76,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/Blog/js/utils.js" ></script>
-  <script  src="/Blog/js/color-schema.js" ></script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
   
 
 
@@ -101,7 +101,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/Blog/">
+    <a class="navbar-brand" href="/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -120,7 +120,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/">
+              <a class="nav-link" href="/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -132,7 +132,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/archives/">
+              <a class="nav-link" href="/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -144,7 +144,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/categories/">
+              <a class="nav-link" href="/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -156,7 +156,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/tags/">
+              <a class="nav-link" href="/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -168,7 +168,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/Blog/about/">
+              <a class="nav-link" href="/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -197,7 +197,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -283,7 +283,7 @@
 <li>而不能直接访问主内存的数据。</li>
 <li>不同的线程也不能互相读写对方的工作内存，线程之间的变量传递必须通过主内存传递。</li>
 </ul>
-<p><img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902174248045.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902174248045"></p>
+<p><img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902174248045.png" srcset="/img/loading.gif" lazyload alt="image-20220902174248045"></p>
 <p><strong>八大原子操作</strong></p>
 <ul>
 <li><strong>lock</strong> 锁定： 作用于主内存，将一个变量标识为线程独占状态</li>
@@ -321,12 +321,12 @@
 <p><strong>内核线程</strong></p>
 <p>​	内核线程(Kernel-Level Thread，KLT)是由操作系统内核直接支持的线程 。这种线程由内核来完成线程切换。内核通过操纵调度器对内核线程进行控制，并负责将线程的任务映射到各个处理器。</p>
 <p>​	 程序一般不会直接使用内核线程，而是使用它的高级接口：轻量级进程（LWP）。轻量级进程就是我们通常意义上讲的线程。每个轻量级进程都由一个内核线程支持。因此这种方式称为1:1的线程模型</p>
-<img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902175804414.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902175804414" style="zoom:80%;">
+<img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902175804414.png" srcset="/img/loading.gif" lazyload alt="image-20220902175804414" style="zoom:80%;">
 
 <p><strong>用户线程</strong></p>
 <p>​	用户线程指完全建立在用户态的线程库中，用户线程的创建，同步，销毁，调度等操作完全在用户态中完成，不需要在频繁切换内核态。因此速度很快。很多高性能的数据库中的多线程就是用的用户线程。</p>
 <p>​	由于是一个进程对应多个用户线程，因此，线程模型是1:N的</p>
-<img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902180157064.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902180157064" style="zoom:80%;">
+<img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902180157064.png" srcset="/img/loading.gif" lazyload alt="image-20220902180157064" style="zoom:80%;">
 
 <p><strong>缺点：</strong></p>
 <ul>
@@ -337,7 +337,7 @@
 <p><strong>Java，Ruby等语言都使用过用户线程，但是最终都放弃了。</strong></p>
 </blockquote>
 <p><strong>用户线程 + 轻量级进程 混合</strong></p>
-<img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902180659795.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902180659795" style="zoom:80%;">
+<img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902180659795.png" srcset="/img/loading.gif" lazyload alt="image-20220902180659795" style="zoom:80%;">
 
 <p>​	在这种情况下，既存在用户线程，又存在轻量级进程，用户线程的建立还是在用户态中，因此不需要频繁切换内核态，保证了速度的高效。轻量级进程为用户线程和内核线程的桥梁。这样可以使用内核提供的线程调度功能处理用户线程中存在的问题。用户线程和轻量级进程的比例是不确定的。因此是N:M的线程模型。</p>
 <h4 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h4><p>&#x3D;&gt;	当多个线程同时访问一个对象，如果不用考虑这些线程在运行环境下的调度和交替执行，也不需要考虑额外的同步，或者在调用方法时进行一些其他的协作，调用这个对象的行为都可以获得正确的结果。那么就称这个对象是线程安全的。</p>
@@ -401,12 +401,12 @@
 <li>对象头中包括两部分的数据包括，对象的哈希码，GC分代年龄，锁状态等。 如果对象是数组，那么还会有额外的一部分存储数组长度。</li>
 </ul>
 <h5 id="加锁过程"><a href="#加锁过程" class="headerlink" title="加锁过程"></a>加锁过程</h5><p>​	在代码即将进入同步块的时候，虚拟机就会在当前栈帧中建立一个名为锁记录（Lock Record）的空间。然后将堆中对象的对象头拷贝到锁记录（官方给它加了Displaced前缀）便于修改对象头的引用时存储之前的信息。</p>
-<p><img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902183256865.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902183256865"></p>
+<p><img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902183256865.png" srcset="/img/loading.gif" lazyload alt="image-20220902183256865"></p>
 <p>​	然后，虚拟机将使用CAS（原子）操作尝试把堆中对象的对象头中前30个字节更新为指向锁记录的引用。</p>
 <ul>
 <li>如果成功，代表当前线程已经拥有了该对象的对象锁。然后将堆中对象头的锁标志位改为00。此时，代表对象就处于轻量级锁定状态。</li>
 </ul>
-<p><img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902183600277.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902183600277"></p>
+<p><img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902183600277.png" srcset="/img/loading.gif" lazyload alt="image-20220902183600277"></p>
 <ul>
 <li><p>如果失败也就是堆中对象头的锁状态已经是0，则意味着对象的对象锁别拿走了。</p>
 <p>虚拟机会判断对象的前30个字节是不是指向当前线程</p>
@@ -434,7 +434,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/Blog/tags/JVM/">#JVM</a>
+        <a href="/tags/JVM/">#JVM</a>
       
     </div>
   
@@ -447,7 +447,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JVM08-高效并发</div>
-      <div>https://he498.github.io/Blog/2022/09/14/JVM08-高效并发/</div>
+      <div>https://he498.github.io/2022/09/14/JVM08-高效并发/</div>
     </div>
     <div class="license-meta">
       
@@ -491,7 +491,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/MybaitsPlus-studyDemo/" title="MybaitsPlus_studyDemo">
+                      <a href="/2022/09/14/MybaitsPlus-studyDemo/" title="MybaitsPlus_studyDemo">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">MybaitsPlus_studyDemo</span>
                         <span class="visible-mobile">上一篇</span>
@@ -501,7 +501,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/Blog/2022/09/14/JVM07-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="JVM07-性能优化">
+                      <a href="/2022/09/14/JVM07-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="JVM07-性能优化">
                         <span class="hidden-mobile">JVM07-性能优化</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -628,8 +628,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/Blog/js/events.js" ></script>
-<script  src="/Blog/js/plugins.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -651,7 +651,7 @@
 
 
   
-    <script  src="/Blog/js/img-lazyload.js" ></script>
+    <script  src="/js/img-lazyload.js" ></script>
   
 
 
@@ -750,7 +750,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/Blog/js/local-search.js" ></script>
+  <script  src="/js/local-search.js" ></script>
 
 
 
@@ -758,7 +758,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/Blog/js/boot.js" ></script>
+<script  src="/js/boot.js" ></script>
 
 
   
