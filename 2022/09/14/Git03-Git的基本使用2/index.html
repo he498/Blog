@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
+  <link rel="icon" href="/Blog/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,19 +19,19 @@
     <meta name="description" content="Github使用将本地项目上传至github 1、在github上新建仓库new repository 2、在本地的项目目录进行初始化 1git init  3、然后将项目中的所有文件添加到本地仓库中； 1git add .  4、提交仓库中的修改 1git commit -m &quot;first commit（自己的描述）&quot;  5、将本地仓库关联到远程仓库 1git remote">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git03-Git的基本使用2">
-<meta property="og:url" content="https://he498.github.io/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/index.html">
+<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="Github使用将本地项目上传至github 1、在github上新建仓库new repository 2、在本地的项目目录进行初始化 1git init  3、然后将项目中的所有文件添加到本地仓库中； 1git add .  4、提交仓库中的修改 1git commit -m &quot;first commit（自己的描述）&quot;  5、将本地仓库关联到远程仓库 1git remote">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907170034917.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907170047330.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907175724551.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907170034917.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907170047330.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907175724551.png">
 <meta property="article:published_time" content="2022-09-13T16:54:27.000Z">
 <meta property="article:modified_time" content="2022-09-13T16:55:38.529Z">
 <meta property="article:author" content="he498">
 <meta property="article:tag" content="Git">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://he498.github.io/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907170034917.png">
+<meta name="twitter:image" content="https://he498.github.io/Blog/Blog/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907170034917.png">
   
   
   
@@ -59,12 +59,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/css/main.css" />
+<link  rel="stylesheet" href="/Blog/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
   
 
 
@@ -73,15 +73,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
+  <script  src="/Blog/js/utils.js" ></script>
+  <script  src="/Blog/js/color-schema.js" ></script>
   
 
 
@@ -98,7 +98,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/Blog/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -117,7 +117,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/Blog/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -129,7 +129,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/Blog/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -141,7 +141,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/Blog/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -153,7 +153,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/Blog/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -165,7 +165,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/Blog/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -194,7 +194,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -330,11 +330,11 @@
 <li>将我们远程的git文件目录拷贝到项目中即可</li>
 </ul>
 <p>2、修改文件，使用IDEA操作git。</p>
-<p><img src="/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907170034917.png" srcset="/img/loading.gif" lazyload alt="image-20220907170034917"></p>
-<p><img src="/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907170047330.png" srcset="/img/loading.gif" lazyload alt="image-20220907170047330"></p>
+<p><img src="/Blog/Blog/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907170034917.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220907170034917"></p>
+<p><img src="/Blog/Blog/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907170047330.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220907170047330"></p>
 <p>3、提交测试</p>
 <h2 id="GIT分支"><a href="#GIT分支" class="headerlink" title="GIT分支"></a>GIT分支</h2><p>​	分支在GIT中相对较难，分支就是科幻电影里面的平行宇宙，如果两个平行宇宙互不干扰，那对现在的你也没啥影响。不过在某个时间点，两个平行宇宙合并了，我们就需要处理一些问题了。</p>
-<img src="/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907175724551.png" srcset="/img/loading.gif" lazyload alt="image-20220907175724551" style="zoom:67%;">
+<img src="/Blog/Blog/2022/09/14/Git03-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A82/image-20220907175724551.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220907175724551" style="zoom:67%;">
 
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 列出所有本地分支</span><br>git branch<br><br><span class="hljs-comment"># 列出所有远程分支</span><br>git branch -r<br><br><span class="hljs-comment"># 新建一个分支，但依然停留在当前分支</span><br>git branch [branch-name]<br><br><span class="hljs-comment"># 新建一个分支，并切换到该分支</span><br>git checkout -b [branch]<br><br><span class="hljs-comment"># 合并指定分支到当前分支</span><br>git merge [branch]<br><br><span class="hljs-comment"># 删除分支</span><br>git branch -d [branch-name]<br><br><span class="hljs-comment"># 删除远程分支</span><br>git push origin --delete [branch-name]<br>git branch -dr [remote/branch]<br><br></code></pre></td></tr></table></figure>
 
@@ -351,7 +351,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Git/">#Git</a>
+        <a href="/Blog/tags/Git/">#Git</a>
       
     </div>
   
@@ -364,7 +364,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Git03-Git的基本使用2</div>
-      <div>https://he498.github.io/2022/09/14/Git03-Git的基本使用2/</div>
+      <div>https://he498.github.io/Blog/2022/09/14/Git03-Git的基本使用2/</div>
     </div>
     <div class="license-meta">
       
@@ -408,7 +408,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/14/JUC01-Lock%E4%B8%8ESynchronized/" title="JUC01-Lock与Synchronized">
+                      <a href="/Blog/2022/09/14/JUC01-Lock%E4%B8%8ESynchronized/" title="JUC01-Lock与Synchronized">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">JUC01-Lock与Synchronized</span>
                         <span class="visible-mobile">上一篇</span>
@@ -418,7 +418,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/14/Git02-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" title="Git02-Git的基本使用">
+                      <a href="/Blog/2022/09/14/Git02-Git%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" title="Git02-Git的基本使用">
                         <span class="hidden-mobile">Git02-Git的基本使用</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -545,8 +545,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
+<script  src="/Blog/js/events.js" ></script>
+<script  src="/Blog/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -568,7 +568,7 @@
 
 
   
-    <script  src="/js/img-lazyload.js" ></script>
+    <script  src="/Blog/js/img-lazyload.js" ></script>
   
 
 
@@ -667,7 +667,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/js/local-search.js" ></script>
+  <script  src="/Blog/js/local-search.js" ></script>
 
 
 
@@ -675,7 +675,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
+<script  src="/Blog/js/boot.js" ></script>
 
 
   

@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
+  <link rel="icon" href="/Blog/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,21 +19,21 @@
     <meta name="description" content="JMMVolatile?&#x3D;&gt; 是Java虚拟机轻量级的同步机制。  保证可见性 不保证原子性 禁止指令重排  JMM？&#x3D;&gt; Java内存模型，是一个不存在的东西，是一个概念，约定！ 关于JMM的一些同步约定：  线程解锁前必须把共享变量立刻刷回主存 线程加锁前，必须读取主存中的最新值到工作内存中 加锁和解锁是同一把锁  八大操作：  问题所在：线程A使用的Flag">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JUC06-JMM">
-<meta property="og:url" content="https://he498.github.io/2022/09/14/JUC06-JMM/index.html">
+<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/JUC06-JMM/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="JMMVolatile?&#x3D;&gt; 是Java虚拟机轻量级的同步机制。  保证可见性 不保证原子性 禁止指令重排  JMM？&#x3D;&gt; Java内存模型，是一个不存在的东西，是一个概念，约定！ 关于JMM的一些同步约定：  线程解锁前必须把共享变量立刻刷回主存 线程加锁前，必须读取主存中的最新值到工作内存中 加锁和解锁是同一把锁  八大操作：  问题所在：线程A使用的Flag">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/JUC06-JMM/image-20220722042116173.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/JUC06-JMM/image-20220722042444133.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/JUC06-JMM/image-20220724143732037.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/JUC06-JMM/image-20220724143953950.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/JUC06-JMM/image-20220724150016640.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC06-JMM/JUC06-JMM/image-20220722042116173.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC06-JMM/JUC06-JMM/image-20220722042444133.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC06-JMM/JUC06-JMM/image-20220724143732037.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC06-JMM/image-20220724143953950.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC06-JMM/image-20220724150016640.png">
 <meta property="article:published_time" content="2022-09-13T17:10:54.000Z">
 <meta property="article:modified_time" content="2022-09-13T17:12:45.096Z">
 <meta property="article:author" content="he498">
 <meta property="article:tag" content="JUC">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://he498.github.io/2022/09/14/JUC06-JMM/image-20220722042116173.png">
+<meta name="twitter:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC06-JMM/JUC06-JMM/image-20220722042116173.png">
   
   
   
@@ -61,12 +61,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/css/main.css" />
+<link  rel="stylesheet" href="/Blog/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
   
 
 
@@ -75,15 +75,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
+  <script  src="/Blog/js/utils.js" ></script>
+  <script  src="/Blog/js/color-schema.js" ></script>
   
 
 
@@ -100,7 +100,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/Blog/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -119,7 +119,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/Blog/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -131,7 +131,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/Blog/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -143,7 +143,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/Blog/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -155,7 +155,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/Blog/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -167,7 +167,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/Blog/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -196,7 +196,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -284,9 +284,9 @@
 <li>加锁和解锁是同一把锁</li>
 </ol>
 <p>八大操作：</p>
-<p><img src="/2022/09/14/JUC06-JMM/image-20220722042116173.png" srcset="/img/loading.gif" lazyload alt="image-20220722042116173"></p>
+<p><img src="/Blog/Blog/2022/09/14/JUC06-JMM/JUC06-JMM/image-20220722042116173.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220722042116173"></p>
 <p>问题所在：线程A使用的Flag 不能及时所见</p>
-<p><img src="/2022/09/14/JUC06-JMM/image-20220722042444133.png" srcset="/img/loading.gif" lazyload alt="image-20220722042444133"></p>
+<p><img src="/Blog/Blog/2022/09/14/JUC06-JMM/JUC06-JMM/image-20220722042444133.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220722042444133"></p>
 <ol>
 <li>read(读取)：<br>从主存中读取数据</li>
 <li>load(载入)：<br>将主存读取到的数据写入工作内存中</li>
@@ -312,9 +312,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//不保证原子性</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">VDemo02</span> &#123;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">static</span> <span class="hljs-type">int</span> <span class="hljs-variable">num</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">()</span>&#123;<br>        num++;<br>    &#125;<br>    <span class="hljs-comment">//理论上互不干扰，结果为2w ,多线程存在同步执行问题，volatile 不保证原子性  //main 19886</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">20</span> ; i++) &#123;<br>            <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(()-&gt;&#123;<br>                <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">j</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">1000</span>; j++) &#123;<br>                    add();<br>                &#125;<br>            &#125;).start();<br>        &#125;<br>        <span class="hljs-keyword">while</span> (Thread.activeCount()&gt;<span class="hljs-number">2</span>)&#123; <span class="hljs-comment">//main gc</span><br>            Thread.yield();<br>        &#125;<br>        System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot; &quot;</span> + num);<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p>2、如果不加synchronized 和 lock 如何保证原子性？</p>
-<p><img src="/2022/09/14/JUC06-JMM/image-20220724143732037.png" srcset="/img/loading.gif" lazyload alt="image-20220724143732037"></p>
+<p><img src="/Blog/Blog/2022/09/14/JUC06-JMM/JUC06-JMM/image-20220724143732037.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220724143732037"></p>
 <p>使用原子类，可以解决原子性 问题</p>
-<img src="/2022/09/14/JUC06-JMM/image-20220724143953950.png" srcset="/img/loading.gif" lazyload alt="image-20220724143953950" style="zoom: 80%;">
+<img src="/Blog/Blog/2022/09/14/JUC06-JMM/image-20220724143953950.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220724143953950" style="zoom: 80%;">
 
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//原子类的 Integer</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">static</span> <span class="hljs-type">AtomicInteger</span> <span class="hljs-variable">num</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicInteger</span>();<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">()</span>&#123;<br>        num.getAndIncrement(); <span class="hljs-comment">// +1 方法 底层用的是 CAS</span><br>    &#125;<br></code></pre></td></tr></table></figure>
 
@@ -368,7 +368,7 @@
 <li>保证特定的操作执行顺序！</li>
 <li>可以保证某些变量的内存可见性</li>
 </ol>
-<img src="/2022/09/14/JUC06-JMM/image-20220724150016640.png" srcset="/img/loading.gif" lazyload alt="image-20220724150016640" style="zoom: 67%;">
+<img src="/Blog/Blog/2022/09/14/JUC06-JMM/image-20220724150016640.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220724150016640" style="zoom: 67%;">
 
                 
               </div>
@@ -381,7 +381,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/JUC/">#JUC</a>
+        <a href="/Blog/tags/JUC/">#JUC</a>
       
     </div>
   
@@ -394,7 +394,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JUC06-JMM</div>
-      <div>https://he498.github.io/2022/09/14/JUC06-JMM/</div>
+      <div>https://he498.github.io/Blog/2022/09/14/JUC06-JMM/</div>
     </div>
     <div class="license-meta">
       
@@ -438,7 +438,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/14/JUC07-%E7%8E%A9%E8%BD%AC%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" title="JUC07-玩转单例模式">
+                      <a href="/Blog/2022/09/14/JUC07-%E7%8E%A9%E8%BD%AC%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" title="JUC07-玩转单例模式">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">JUC07-玩转单例模式</span>
                         <span class="visible-mobile">上一篇</span>
@@ -448,7 +448,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/14/JUC05-%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%92%8CForkJoin/" title="JUC05-流式计算和ForkJoin">
+                      <a href="/Blog/2022/09/14/JUC05-%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E5%92%8CForkJoin/" title="JUC05-流式计算和ForkJoin">
                         <span class="hidden-mobile">JUC05-流式计算和ForkJoin</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -575,8 +575,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
+<script  src="/Blog/js/events.js" ></script>
+<script  src="/Blog/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -598,7 +598,7 @@
 
 
   
-    <script  src="/js/img-lazyload.js" ></script>
+    <script  src="/Blog/js/img-lazyload.js" ></script>
   
 
 
@@ -697,7 +697,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/js/local-search.js" ></script>
+  <script  src="/Blog/js/local-search.js" ></script>
 
 
 
@@ -705,7 +705,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
+<script  src="/Blog/js/boot.js" ></script>
 
 
   

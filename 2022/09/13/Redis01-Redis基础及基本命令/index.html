@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
+  <link rel="icon" href="/Blog/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,18 +19,18 @@
     <meta name="description" content="什么是Redis?​	Redis is an open source (BSD licensed), in-memory data structure store used as a database, cache, message broker, and streaming engine. Redis provides data structures such as strings, hashe">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis01-Redis基础及基本命令">
-<meta property="og:url" content="https://he498.github.io/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:url" content="https://he498.github.io/Blog/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="什么是Redis?​	Redis is an open source (BSD licensed), in-memory data structure store used as a database, cache, message broker, and streaming engine. Redis provides data structures such as strings, hashe">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://he498.github.io/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/image-20220526151129074.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/image-20220526151802178.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/image-20220526151129074.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/image-20220526151802178.png">
 <meta property="article:published_time" content="2022-09-13T14:30:18.000Z">
 <meta property="article:modified_time" content="2022-09-13T14:37:48.464Z">
 <meta property="article:author" content="he498">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://he498.github.io/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/image-20220526151129074.png">
+<meta name="twitter:image" content="https://he498.github.io/Blog/Blog/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/image-20220526151129074.png">
   
   
   
@@ -58,12 +58,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/css/main.css" />
+<link  rel="stylesheet" href="/Blog/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
   
 
 
@@ -72,15 +72,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
+  <script  src="/Blog/js/utils.js" ></script>
+  <script  src="/Blog/js/color-schema.js" ></script>
   
 
 
@@ -97,7 +97,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/Blog/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -116,7 +116,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/Blog/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -128,7 +128,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/Blog/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -140,7 +140,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/Blog/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -152,7 +152,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/Blog/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -164,7 +164,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/Blog/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -193,7 +193,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -310,10 +310,10 @@
 <p><strong>redis是将所有数据都存放在内存中，单线程去操作效率是最高的</strong></p>
 <h1 id="测试性能-redis-benchmark"><a href="#测试性能-redis-benchmark" class="headerlink" title="测试性能 -redis-benchmark"></a>测试性能 -redis-benchmark</h1><p>redis-benchmark是一个压力测试工具！</p>
 <p>可选参数：</p>
-<p><img src="/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/image-20220526151129074.png" srcset="/img/loading.gif" lazyload alt="image-20220526151129074"></p>
+<p><img src="/Blog/Blog/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/image-20220526151129074.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220526151129074"></p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#测试： 100个并发连接   100000请求</span><br>redis-benchmark -h localhost -p 6379 -c 100 -n 100000<br></code></pre></td></tr></table></figure>
 
-<p><img src="/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/image-20220526151802178.png" srcset="/img/loading.gif" lazyload alt="image-20220526151802178"></p>
+<p><img src="/Blog/Blog/2022/09/13/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/Redis01-Redis%E5%9F%BA%E7%A1%80%E5%8F%8A%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/image-20220526151802178.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220526151802178"></p>
 <figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs asciidoc"><span class="hljs-section">====== SET ======                                                    </span><br><span class="hljs-code">  100000 requests completed in 1.01 seconds</span><br><span class="hljs-code">  100 parallel clients  #一百个并发客户端</span><br><span class="hljs-code">  3 bytes payload    #每次写入3字节</span><br><span class="hljs-code">  keep alive: 1    #只有一台服务器来处理这些请求 ,单机性能</span><br><span class="hljs-code">  host configuration &quot;save&quot;: 3600 1 300 100 60 10000</span><br><span class="hljs-code">  host configuration &quot;appendonly&quot;: no</span><br><span class="hljs-code">  multi-thread: no</span><br></code></pre></td></tr></table></figure>
 
 
@@ -330,7 +330,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/Redis/">#Redis</a>
+        <a href="/Blog/tags/Redis/">#Redis</a>
       
     </div>
   
@@ -343,7 +343,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>Redis01-Redis基础及基本命令</div>
-      <div>https://he498.github.io/2022/09/13/Redis01-Redis基础及基本命令/</div>
+      <div>https://he498.github.io/Blog/2022/09/13/Redis01-Redis基础及基本命令/</div>
     </div>
     <div class="license-meta">
       
@@ -387,7 +387,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/13/Redis02-%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="Redis02-五大数据类型">
+                      <a href="/Blog/2022/09/13/Redis02-%E4%BA%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" title="Redis02-五大数据类型">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">Redis02-五大数据类型</span>
                         <span class="visible-mobile">上一篇</span>
@@ -397,7 +397,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/13/SQL03-DQL/" title="SQL03-DQL">
+                      <a href="/Blog/2022/09/13/SQL03-DQL/" title="SQL03-DQL">
                         <span class="hidden-mobile">SQL03-DQL</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -524,8 +524,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
+<script  src="/Blog/js/events.js" ></script>
+<script  src="/Blog/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -547,7 +547,7 @@
 
 
   
-    <script  src="/js/img-lazyload.js" ></script>
+    <script  src="/Blog/js/img-lazyload.js" ></script>
   
 
 
@@ -646,7 +646,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/js/local-search.js" ></script>
+  <script  src="/Blog/js/local-search.js" ></script>
 
 
 
@@ -654,7 +654,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
+<script  src="/Blog/js/boot.js" ></script>
 
 
   

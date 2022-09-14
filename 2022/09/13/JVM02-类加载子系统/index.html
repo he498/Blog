@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
+  <link rel="icon" href="/Blog/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,22 +19,22 @@
     <meta name="description" content="1、类加载子系统类加载子系统概述&#x3D;&gt; (图源：尚硅谷JVM教程) 类加载子系统的作用：  类加载子系统负责从文件系统或者网络中加载Class文件（Class文件在开头有特定标识）。  类加载器(Class Loader)只负责class文件的加载，至于是否可以运行，由执行引擎(Execution Engine)决定。 加载的类信息存放于一块成为方法区的内存空间。除了类信息之外，方法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM02-类加载子系统">
-<meta property="og:url" content="https://he498.github.io/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:url" content="https://he498.github.io/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="1、类加载子系统类加载子系统概述&#x3D;&gt; (图源：尚硅谷JVM教程) 类加载子系统的作用：  类加载子系统负责从文件系统或者网络中加载Class文件（Class文件在开头有特定标识）。  类加载器(Class Loader)只负责class文件的加载，至于是否可以运行，由执行引擎(Execution Engine)决定。 加载的类信息存放于一块成为方法区的内存空间。除了类信息之外，方法">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://he498.github.io/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825161843810.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825163141532.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825163933377.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825170159782.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825173019524.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825173119691.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825161843810.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825163141532.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825163933377.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825170159782.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825173019524.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825173119691.png">
 <meta property="article:published_time" content="2022-09-13T15:57:01.000Z">
 <meta property="article:modified_time" content="2022-09-13T15:59:38.220Z">
 <meta property="article:author" content="he498">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://he498.github.io/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825161843810.png">
+<meta name="twitter:image" content="https://he498.github.io/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825161843810.png">
   
   
   
@@ -62,12 +62,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/css/main.css" />
+<link  rel="stylesheet" href="/Blog/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
   
 
 
@@ -76,15 +76,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
+  <script  src="/Blog/js/utils.js" ></script>
+  <script  src="/Blog/js/color-schema.js" ></script>
   
 
 
@@ -101,7 +101,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/Blog/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -120,7 +120,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/Blog/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -132,7 +132,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/Blog/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -144,7 +144,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/Blog/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -156,7 +156,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/Blog/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -168,7 +168,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/Blog/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -197,7 +197,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -271,7 +271,7 @@
             
               <div class="markdown-body">
                 
-                <h2 id="1、类加载子系统"><a href="#1、类加载子系统" class="headerlink" title="1、类加载子系统"></a>1、类加载子系统</h2><h4 id="类加载子系统概述-x3D-gt"><a href="#类加载子系统概述-x3D-gt" class="headerlink" title="类加载子系统概述&#x3D;&gt;"></a>类加载子系统概述&#x3D;&gt;</h4><p><img src="/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825161843810.png" srcset="/img/loading.gif" lazyload alt="image-20220825161843810"></p>
+                <h2 id="1、类加载子系统"><a href="#1、类加载子系统" class="headerlink" title="1、类加载子系统"></a>1、类加载子系统</h2><h4 id="类加载子系统概述-x3D-gt"><a href="#类加载子系统概述-x3D-gt" class="headerlink" title="类加载子系统概述&#x3D;&gt;"></a>类加载子系统概述&#x3D;&gt;</h4><p><img src="/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825161843810.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220825161843810"></p>
 <p>(图源：尚硅谷JVM教程)</p>
 <p><strong>类加载子系统的作用：</strong></p>
 <ul>
@@ -284,7 +284,7 @@
 </li>
 </ul>
 <p><strong>类加载器扮演的角色：</strong></p>
-<p><img src="/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825163141532.png" srcset="/img/loading.gif" lazyload alt="image-20220825163141532"></p>
+<p><img src="/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825163141532.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220825163141532"></p>
 <ul>
 <li><p>Car.class 存放于本地硬盘中，在运行的时候，JVM将Car.class 文件加载到JVM中，被称为DNA元数据模板。</p>
 <p>存放在JVM的方法区中，之后根据元数据模板实例化相应的对象。</p>
@@ -297,7 +297,7 @@
 <p>其中链接阶段中又可以细分为验证、准备、解析三个子阶段。</p>
 </li>
 </ul>
-<p><img src="/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825163933377.png" srcset="/img/loading.gif" lazyload alt="image-20220825163933377"></p>
+<p><img src="/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825163933377.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220825163933377"></p>
 <h5 id="加载过程"><a href="#加载过程" class="headerlink" title="加载过程"></a><strong>加载过程</strong></h5><ol>
 <li>通过一个类的全限定名获取定义此类的二进制字节流。</li>
 <li>将这个字节流所代表的静态存储结构转化为方法区的运行时数据结构。</li>
@@ -361,7 +361,7 @@
 <li>扩展类加载器（Extension ClassLoader）</li>
 <li>应用程序类加载器（Application ClassLoader）</li>
 </ul>
-<img src="/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825170159782.png" srcset="/img/loading.gif" lazyload alt="image-20220825170159782" style="zoom:67%;">
+<img src="/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825170159782.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220825170159782" style="zoom:67%;">
 
 <p><strong>启动类加载器：</strong></p>
 <ul>
@@ -426,9 +426,9 @@
 <h4 id="双亲委派机制"><a href="#双亲委派机制" class="headerlink" title="双亲委派机制"></a>双亲委派机制</h4><p>&#x3D;&gt;</p>
 <p>Java虚拟机对class文件采用的是按需加载方式，也就是说当需要使用该类时才会将它的class文件加载到内存生成的class对象。而且加载某个类的class文件时，java虚拟机采用的是双亲委派机制。</p>
 <p>即把请求交由父类处理，它是一种任务委派模式</p>
-<img src="/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825173019524.png" srcset="/img/loading.gif" lazyload alt="image-20220825173019524" style="zoom: 67%;">
+<img src="/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825173019524.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220825173019524" style="zoom: 67%;">
 
-<img src="/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825173119691.png" srcset="/img/loading.gif" lazyload alt="image-20220825173119691" style="zoom:67%;">
+<img src="/Blog/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/image-20220825173119691.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220825173119691" style="zoom:67%;">
 
 
 
@@ -486,7 +486,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/JVM/">#JVM</a>
+        <a href="/Blog/tags/JVM/">#JVM</a>
       
     </div>
   
@@ -499,7 +499,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JVM02-类加载子系统</div>
-      <div>https://he498.github.io/2022/09/13/JVM02-类加载子系统/</div>
+      <div>https://he498.github.io/Blog/2022/09/13/JVM02-类加载子系统/</div>
     </div>
     <div class="license-meta">
       
@@ -543,7 +543,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" title="JVM03-运行时数据区">
+                      <a href="/Blog/2022/09/14/JVM03-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA/" title="JVM03-运行时数据区">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">JVM03-运行时数据区</span>
                         <span class="visible-mobile">上一篇</span>
@@ -553,7 +553,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/" title="JVM01-JVM简介">
+                      <a href="/Blog/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/" title="JVM01-JVM简介">
                         <span class="hidden-mobile">JVM01-JVM简介</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -680,8 +680,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
+<script  src="/Blog/js/events.js" ></script>
+<script  src="/Blog/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -703,7 +703,7 @@
 
 
   
-    <script  src="/js/img-lazyload.js" ></script>
+    <script  src="/Blog/js/img-lazyload.js" ></script>
   
 
 
@@ -802,7 +802,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/js/local-search.js" ></script>
+  <script  src="/Blog/js/local-search.js" ></script>
 
 
 
@@ -810,7 +810,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
+<script  src="/Blog/js/boot.js" ></script>
 
 
   

@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
+  <link rel="icon" href="/Blog/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,18 +19,18 @@
     <meta name="description" content="JVM初探究常见问题？&#x3D; &gt;  谈谈你对JVM的理解？java8虚拟机和之前的变化更加 什么时OOM，什么是栈溢出StackOverFlowError？&#x3D;&gt;如何分析？ JVM的常用调优参数有哪些？ 内存快照如何抓取，怎么分析Dump文件？ 谈谈JVM中，类加载器你的认识？   JVM简介 JVM？  &#x3D;&gt;  JVM 是Java Virtaul Mac">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM01-JVM简介">
-<meta property="og:url" content="https://he498.github.io/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:url" content="https://he498.github.io/Blog/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="JVM初探究常见问题？&#x3D; &gt;  谈谈你对JVM的理解？java8虚拟机和之前的变化更加 什么时OOM，什么是栈溢出StackOverFlowError？&#x3D;&gt;如何分析？ JVM的常用调优参数有哪些？ 内存快照如何抓取，怎么分析Dump文件？ 谈谈JVM中，类加载器你的认识？   JVM简介 JVM？  &#x3D;&gt;  JVM 是Java Virtaul Mac">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://he498.github.io/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/image-20220816171314507.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/image-20220825154607217.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/JVM01-JVM%E7%AE%80%E4%BB%8B/image-20220816171314507.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/JVM01-JVM%E7%AE%80%E4%BB%8B/image-20220825154607217.png">
 <meta property="article:published_time" content="2022-09-13T15:53:57.000Z">
 <meta property="article:modified_time" content="2022-09-13T15:55:33.809Z">
 <meta property="article:author" content="he498">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://he498.github.io/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/image-20220816171314507.png">
+<meta name="twitter:image" content="https://he498.github.io/Blog/Blog/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/JVM01-JVM%E7%AE%80%E4%BB%8B/image-20220816171314507.png">
   
   
   
@@ -58,12 +58,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/css/main.css" />
+<link  rel="stylesheet" href="/Blog/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
   
 
 
@@ -72,15 +72,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
+  <script  src="/Blog/js/utils.js" ></script>
+  <script  src="/Blog/js/color-schema.js" ></script>
   
 
 
@@ -97,7 +97,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/Blog/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -116,7 +116,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/Blog/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -128,7 +128,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/Blog/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -140,7 +140,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/Blog/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -152,7 +152,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/Blog/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -164,7 +164,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/Blog/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -193,7 +193,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -275,13 +275,13 @@
 <li>内存快照如何抓取，怎么分析Dump文件？</li>
 <li>谈谈JVM中，类加载器你的认识？</li>
 </ul>
-<p><img src="/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/image-20220816171314507.png" srcset="/img/loading.gif" lazyload alt="image-20220816171314507"></p>
+<p><img src="/Blog/Blog/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/JVM01-JVM%E7%AE%80%E4%BB%8B/image-20220816171314507.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220816171314507"></p>
 <h2 id="JVM简介"><a href="#JVM简介" class="headerlink" title="JVM简介"></a>JVM简介</h2><blockquote>
 <p>JVM？</p>
 </blockquote>
 <p>&#x3D;&gt;  JVM 是Java Virtaul Machine （Java虚拟机）的缩写，是一种用于计算设备的规范，它是一个虚构出来的计算机，是通过在实际计算机上仿真模拟各种计算机功能来实现的。<br>引入Java语言虚拟机后，Java语言在不同平台上运行时不需要重新编译。Java语言使用JVM屏蔽了与具体平台相关的信息，使得Java语言编译程序<strong>只需要生成在Java虚拟机上运行的目标代码（字节码），就可以在多种平台上不加修改地运行。</strong></p>
 <h4 id="JVM的位置"><a href="#JVM的位置" class="headerlink" title="JVM的位置"></a>JVM的位置</h4><p>&#x3D;&gt;</p>
-<p><img src="/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/image-20220825154607217.png" srcset="/img/loading.gif" lazyload alt="image-20220825154607217"></p>
+<p><img src="/Blog/Blog/2022/09/13/JVM01-JVM%E7%AE%80%E4%BB%8B/JVM01-JVM%E7%AE%80%E4%BB%8B/image-20220825154607217.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220825154607217"></p>
 <ul>
 <li>JVM是运行在操作系统之上的，它与硬件没有直接的交互</li>
 <li>JVM是运行在操作系统之上的，他虽然与硬件没有直接交互，但是可以调用底层的硬件，比如用JNI（Java本地接口）来调用底层硬件接口。</li>
@@ -313,7 +313,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/JVM/">#JVM</a>
+        <a href="/Blog/tags/JVM/">#JVM</a>
       
     </div>
   
@@ -326,7 +326,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JVM01-JVM简介</div>
-      <div>https://he498.github.io/2022/09/13/JVM01-JVM简介/</div>
+      <div>https://he498.github.io/Blog/2022/09/13/JVM01-JVM简介/</div>
     </div>
     <div class="license-meta">
       
@@ -370,7 +370,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/" title="JVM02-类加载子系统">
+                      <a href="/Blog/2022/09/13/JVM02-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F/" title="JVM02-类加载子系统">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">JVM02-类加载子系统</span>
                         <span class="visible-mobile">上一篇</span>
@@ -380,7 +380,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/13/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="Lambda表达式">
+                      <a href="/Blog/2022/09/13/Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="Lambda表达式">
                         <span class="hidden-mobile">Lambda表达式</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -507,8 +507,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
+<script  src="/Blog/js/events.js" ></script>
+<script  src="/Blog/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -530,7 +530,7 @@
 
 
   
-    <script  src="/js/img-lazyload.js" ></script>
+    <script  src="/Blog/js/img-lazyload.js" ></script>
   
 
 
@@ -629,7 +629,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/js/local-search.js" ></script>
+  <script  src="/Blog/js/local-search.js" ></script>
 
 
 
@@ -637,7 +637,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
+<script  src="/Blog/js/boot.js" ></script>
 
 
   

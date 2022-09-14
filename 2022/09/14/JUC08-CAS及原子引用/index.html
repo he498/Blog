@@ -7,8 +7,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
-  <link rel="icon" href="/img/icon.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
+  <link rel="icon" href="/Blog/img/icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   
@@ -19,21 +19,21 @@
     <meta name="description" content="CAS什么是CAS？&#x3D;&gt;CAS   – compareAndSet : 比较并交换 1234567891011121314151617public class CASDemo &amp;#123;    &#x2F;&#x2F;CAS compareAndSet : 比较并交换    public static void main(String[] args) &amp;#123;        AtomicInte">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JUC08-CAS及原子引用">
-<meta property="og:url" content="https://he498.github.io/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/index.html">
+<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/index.html">
 <meta property="og:site_name" content="Ming&#39;s blog">
 <meta property="og:description" content="CAS什么是CAS？&#x3D;&gt;CAS   – compareAndSet : 比较并交换 1234567891011121314151617public class CASDemo &amp;#123;    &#x2F;&#x2F;CAS compareAndSet : 比较并交换    public static void main(String[] args) &amp;#123;        AtomicInte">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003555930.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003623404.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003809096.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003901805.png">
-<meta property="og:image" content="https://he498.github.io/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725151926580.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003555930.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003623404.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003809096.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003901805.png">
+<meta property="og:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725151926580.png">
 <meta property="article:published_time" content="2022-09-13T17:14:41.000Z">
 <meta property="article:modified_time" content="2022-09-13T17:16:34.496Z">
 <meta property="article:author" content="he498">
 <meta property="article:tag" content="JUC">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://he498.github.io/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003555930.png">
+<meta name="twitter:image" content="https://he498.github.io/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003555930.png">
   
   
   
@@ -61,12 +61,12 @@
 <link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
-<link  rel="stylesheet" href="/css/main.css" />
+<link  rel="stylesheet" href="/Blog/css/main.css" />
 
 
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
   
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
   
 
 
@@ -75,15 +75,15 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"he498.github.io","root":"/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
     }
   </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
+  <script  src="/Blog/js/utils.js" ></script>
+  <script  src="/Blog/js/color-schema.js" ></script>
   
 
 
@@ -100,7 +100,7 @@
 <div class="header-inner" style="height: 70vh;">
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">
+    <a class="navbar-brand" href="/Blog/">
       <strong>Ming&#39;s Blog</strong>
     </a>
 
@@ -119,7 +119,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/">
+              <a class="nav-link" href="/Blog/">
                 <i class="iconfont icon-home-fill"></i>
                 首页
               </a>
@@ -131,7 +131,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
+              <a class="nav-link" href="/Blog/archives/">
                 <i class="iconfont icon-archive-fill"></i>
                 归档
               </a>
@@ -143,7 +143,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
+              <a class="nav-link" href="/Blog/categories/">
                 <i class="iconfont icon-category-fill"></i>
                 分类
               </a>
@@ -155,7 +155,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/tags/">
+              <a class="nav-link" href="/Blog/tags/">
                 <i class="iconfont icon-tags-fill"></i>
                 标签
               </a>
@@ -167,7 +167,7 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/about/">
+              <a class="nav-link" href="/Blog/about/">
                 <i class="iconfont icon-user-fill"></i>
                 关于
               </a>
@@ -196,7 +196,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default2.png') no-repeat center center; background-size: cover;">
+     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -275,17 +275,17 @@
 
 
 
-<h4 id="Unsafe类？"><a href="#Unsafe类？" class="headerlink" title="Unsafe类？"></a>Unsafe类？</h4><p>&#x3D;&gt;Java 无法直接操作内存，通过调用C++(native)去操作内存，而Unsafe类就是Java的内存，通过它可以去操作内存<img src="/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003555930.png" srcset="/img/loading.gif" lazyload alt="image-20220725003555930"></p>
-<p><img src="/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003623404.png" srcset="/img/loading.gif" lazyload alt="image-20220725003623404"></p>
+<h4 id="Unsafe类？"><a href="#Unsafe类？" class="headerlink" title="Unsafe类？"></a>Unsafe类？</h4><p>&#x3D;&gt;Java 无法直接操作内存，通过调用C++(native)去操作内存，而Unsafe类就是Java的内存，通过它可以去操作内存<img src="/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003555930.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220725003555930"></p>
+<p><img src="/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003623404.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220725003623404"></p>
 <blockquote>
 <p>getAndIncrement()</p>
 </blockquote>
-<p><img src="/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003809096.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003901805.png" srcset="/img/loading.gif" lazyload alt="image-20220725003901805"></p>
+<p><img src="/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003809096.png" srcset="/Blog/img/loading.gif" lazyload></p>
+<p><img src="/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725003901805.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220725003901805"></p>
 <p>最后：</p>
 <p><strong>CAS会涉及到ABA问题！</strong></p>
 <h1 id="原子引用"><a href="#原子引用" class="headerlink" title="原子引用"></a>原子引用</h1><h4 id="什么是ABA问题？"><a href="#什么是ABA问题？" class="headerlink" title="什么是ABA问题？"></a>什么是ABA问题？</h4><p>&#x3D;&gt;  CAS机制的原理由CPU支持的原子操作，其原子性是在硬件层面进行保证的。而CAS机制可能会出现ABA问题，<strong>即T1读取内存变量为A,T2修改内存变量为B,T2修改内存变量为A,这时T1再CAS操作A时是可行的。但实际上在T1第二次操作A时，已经被其他线程修改过了。</strong></p>
-<p><img src="/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725151926580.png" srcset="/img/loading.gif" lazyload alt="image-20220725151926580"></p>
+<p><img src="/Blog/Blog/2022/09/14/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/JUC08-CAS%E5%8F%8A%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8/image-20220725151926580.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220725151926580"></p>
 <p>ABA问题解决：带版本号的原子操作！</p>
 <p>坑：<strong>Integer使用了对象缓存机制，默认范围是 -128 ~ 127,推荐使用静态工厂方法value Of获取对象实例，而不是new,因为value Of使用缓存，而 new 一定会创建新的对象分配新的内存空间；</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//如果泛型是包装类，注意引用类型</span><br>       AtomicStampedReference&lt;Integer&gt; atomicStampedReference = <span class="hljs-keyword">new</span> <span class="hljs-title class_">AtomicStampedReference</span>&lt;&gt;(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>);<br>       <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(()-&gt;&#123;<br>           <span class="hljs-type">int</span> <span class="hljs-variable">stamp</span> <span class="hljs-operator">=</span> atomicStampedReference.getStamp(); <span class="hljs-comment">//获得版本号</span><br>           System.out.println(<span class="hljs-string">&quot;a1=&gt;&quot;</span>+stamp);<br>           <span class="hljs-keyword">try</span> &#123;<br>               TimeUnit.SECONDS.sleep(<span class="hljs-number">1</span>);<br>           &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>               e.printStackTrace();<br>           &#125;<br>           System.out.println(atomicStampedReference.compareAndSet(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, atomicStampedReference.getStamp(), atomicStampedReference.getStamp() + <span class="hljs-number">1</span>));<br>           System.out.println(<span class="hljs-string">&quot;a2=&gt;&quot;</span>+atomicStampedReference.getStamp());<br>           System.out.println(atomicStampedReference.compareAndSet(<span class="hljs-number">2</span>, <span class="hljs-number">1</span>, atomicStampedReference.getStamp(), atomicStampedReference.getStamp() + <span class="hljs-number">1</span>));<br>           System.out.println(<span class="hljs-string">&quot;a3=&gt;&quot;</span>+atomicStampedReference.getStamp());<br><br>       &#125;,<span class="hljs-string">&quot;a&quot;</span>).start();<br><br>       <span class="hljs-keyword">new</span> <span class="hljs-title class_">Thread</span>(()-&gt;&#123;<br>           <span class="hljs-type">int</span> <span class="hljs-variable">stamp</span> <span class="hljs-operator">=</span> atomicStampedReference.getStamp();<br>           System.out.println(<span class="hljs-string">&quot;b1=&gt;&quot;</span>+stamp);<br>           <span class="hljs-keyword">try</span> &#123;<br>               TimeUnit.SECONDS.sleep(<span class="hljs-number">2</span>);<br>           &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>               e.printStackTrace();<br>           &#125;<br>           System.out.println(atomicStampedReference.compareAndSet(<span class="hljs-number">1</span>, <span class="hljs-number">6</span>, stamp, stamp + <span class="hljs-number">1</span>));<br>           System.out.println(<span class="hljs-string">&quot;b1=&gt;&quot;</span>+atomicStampedReference.getStamp());<br><br>       &#125;,<span class="hljs-string">&quot;b&quot;</span>).start();<br></code></pre></td></tr></table></figure>
@@ -302,7 +302,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/JUC/">#JUC</a>
+        <a href="/Blog/tags/JUC/">#JUC</a>
       
     </div>
   
@@ -315,7 +315,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>JUC08-CAS及原子引用</div>
-      <div>https://he498.github.io/2022/09/14/JUC08-CAS及原子引用/</div>
+      <div>https://he498.github.io/Blog/2022/09/14/JUC08-CAS及原子引用/</div>
     </div>
     <div class="license-meta">
       
@@ -359,7 +359,7 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/09/14/JUC09-%E5%90%84%E7%A7%8D%E9%94%81%E5%B0%8F%E7%BB%93/" title="JUC09-各种锁小结">
+                      <a href="/Blog/2022/09/14/JUC09-%E5%90%84%E7%A7%8D%E9%94%81%E5%B0%8F%E7%BB%93/" title="JUC09-各种锁小结">
                         <i class="iconfont icon-arrowleft"></i>
                         <span class="hidden-mobile">JUC09-各种锁小结</span>
                         <span class="visible-mobile">上一篇</span>
@@ -369,7 +369,7 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/09/14/JUC07-%E7%8E%A9%E8%BD%AC%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" title="JUC07-玩转单例模式">
+                      <a href="/Blog/2022/09/14/JUC07-%E7%8E%A9%E8%BD%AC%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/" title="JUC07-玩转单例模式">
                         <span class="hidden-mobile">JUC07-玩转单例模式</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
@@ -496,8 +496,8 @@
 
 <script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
 <script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
+<script  src="/Blog/js/events.js" ></script>
+<script  src="/Blog/js/plugins.js" ></script>
 
 
   <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
@@ -519,7 +519,7 @@
 
 
   
-    <script  src="/js/img-lazyload.js" ></script>
+    <script  src="/Blog/js/img-lazyload.js" ></script>
   
 
 
@@ -618,7 +618,7 @@
 
   <script>Fluid.plugins.imageCaption();</script>
 
-  <script  src="/js/local-search.js" ></script>
+  <script  src="/Blog/js/local-search.js" ></script>
 
 
 
@@ -626,7 +626,7 @@
 
 <!-- 主题的启动项，将它保持在最底部 -->
 <!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
+<script  src="/Blog/js/boot.js" ></script>
 
 
   
