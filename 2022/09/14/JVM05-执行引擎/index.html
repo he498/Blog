@@ -1,0 +1,754 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
+  <link rel="icon" href="/Blog/img/icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="he498">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="3、执行引擎 &#x3D;&gt;  执行引擎是Java虚拟机的核心组成部分之一。 虚拟机是一个相对于“物理机”的概念，这两种机器都有代码执行能力，其区别是物理机的执行引擎是直接建立在处理器、缓存、指令集和操作系统层面上的，而&#x3D;&#x3D;虚拟机的执行引擎则是由软件自行实现&#x3D;&#x3D;的，因此可以不受物理条件制约地定制指令集与执行引擎的结构体系，能够执行那些不被硬件直接支持的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM05-执行引擎">
+<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/index.html">
+<meta property="og:site_name" content="Ming&#39;s blog">
+<meta property="og:description" content="3、执行引擎 &#x3D;&gt;  执行引擎是Java虚拟机的核心组成部分之一。 虚拟机是一个相对于“物理机”的概念，这两种机器都有代码执行能力，其区别是物理机的执行引擎是直接建立在处理器、缓存、指令集和操作系统层面上的，而&#x3D;&#x3D;虚拟机的执行引擎则是由软件自行实现&#x3D;&#x3D;的，因此可以不受物理条件制约地定制指令集与执行引擎的结构体系，能够执行那些不被硬件直接支持的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830202951284.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830203201603.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830203344256.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830203517226.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830203605737.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830204157898.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830204703047.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830205043732.png">
+<meta property="article:published_time" content="2022-09-13T16:12:54.000Z">
+<meta property="article:modified_time" content="2022-09-13T16:15:13.244Z">
+<meta property="article:author" content="he498">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://he498.github.io/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830202951284.png">
+  
+  
+  
+  <title>JVM05-执行引擎 - Ming&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/Blog/js/utils.js" ></script>
+  <script  src="/Blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Blog/">
+      <strong>Ming&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="JVM05-执行引擎"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-14 00:12" pubdate>
+          2022年9月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          3.7k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">JVM05-执行引擎</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="3、执行引擎"><a href="#3、执行引擎" class="headerlink" title="3、执行引擎"></a>3、执行引擎</h2><p><img src="/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830202951284.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830202951284"></p>
+<p>&#x3D;&gt;</p>
+<ul>
+<li>执行引擎是Java虚拟机的核心组成部分之一。</li>
+<li>虚拟机是一个相对于“物理机”的概念，这两种机器都有代码执行能力，其区别是物理机的执行引擎是直接建立在处理器、缓存、指令集和操作系统层面上的，而&#x3D;&#x3D;虚拟机的执行引擎则是由软件自行实现&#x3D;&#x3D;的，因此可以不受物理条件制约地定制指令集与执行引擎的结构体系，能够执行那些不被硬件直接支持的指令集格式。</li>
+<li>JVM的主要任务是&#x3D;&#x3D;负责装载字节码到其内部&#x3D;&#x3D;，但字节码并不能够直接运行在操作系统之上，因为字节码指令并非等价于本地机器指令，它内部包含的仅仅只是一些能够被JVM所识别的字节码指令、符号表和其他辅助信息</li>
+<li>那么，如果想让一个Java程序运行起来、执行引擎的任务就是&#x3D;&#x3D;将字节码指令解释&#x2F;编译为对应平台上的本地机器指令才可以&#x3D;&#x3D;。简单来说，JVM中的执行引擎充当了将高级语言翻译为机器语言的译者.</li>
+</ul>
+<p><strong>工作过程：</strong></p>
+<p>从外观上来看，所有的Java虚拟机的执行引擎输入、输出都是一致的：输入的是字节码二进制流，处理过程是字节码解析执行的等效过程，输出的是执行结果。</p>
+<ol>
+<li>执行引擎在执行的过程中究竟需要执行什么样的字节码指令完全依赖于PC寄存器。</li>
+<li>每当执行完一项指令操作后，PC寄存器就会更新下一条需要被执行的指令地址。</li>
+<li>当然方法在执行的过程中，执行引擎有可能会通过存储在局部变量表中的对象引用准确定位到存储在Java堆区中的对象实例信息，以及通过对象头中的元数据指针定位到目标对象的类型信息。</li>
+</ol>
+<p><img src="/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830203201603.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830203201603"></p>
+<h4 id="Java代码编译执行过程"><a href="#Java代码编译执行过程" class="headerlink" title="Java代码编译执行过程"></a>Java代码编译执行过程</h4><p><strong>大部分的程序代码转换成物理机的目标代码或虚拟机能执行的指令集之前，都需要经过下面图中的各个步骤：</strong></p>
+<p><img src="/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830203344256.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830203344256"></p>
+<ul>
+<li><p>解释型语言走中间一行</p>
+</li>
+<li><p>编译型语言走下边一行</p>
+</li>
+</ul>
+<p><strong>Java代码编译是由Java源码编译器来完成的</strong></p>
+<p><img src="/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830203517226.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830203517226"></p>
+<p><strong>Java字节码的执行是由JVM执行引擎来完成的</strong></p>
+<p><img src="/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830203605737.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830203605737"></p>
+<p><strong>解释器</strong></p>
+<p>&#x3D;&gt; 当Java虚拟机启动时会根据定义的规范对字节码采用逐行解释的方式执行，将每条字节码文件中的内容“翻译”为对应平台的本地机器指令执行。</p>
+<p><strong>JIT编译器</strong></p>
+<p>&#x3D;&gt; 就是虚拟机将源代码直接编译成和本地机器平台相关的机器语言</p>
+<p><strong>为什么说Java是半编译半解释型语言？</strong></p>
+<p><img src="/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830204157898.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830204157898"></p>
+<p>JDK1.0时代，将Java语言定位为“解释执行”还是比较准确的。再后来，Java也发展出可以直接生成本地代码的编译器。 现在JVM在执行Java代码的时候，通常都会将解释执行与编译执行二者结合起来进行。</p>
+<h4 id="机器码，指令，汇编语言"><a href="#机器码，指令，汇编语言" class="headerlink" title="机器码，指令，汇编语言"></a>机器码，指令，汇编语言</h4><p><strong>机器码</strong></p>
+<ul>
+<li>各种用二进制编码方式表示的指令，叫做&#x3D;&#x3D;机器指令码&#x3D;&#x3D;。开始，人们就用它采编写程序，这就是机器语言。</li>
+<li>机器语言虽然能够被计算机理解和接受，但和人们的语言差别太大，不易被人们理解和记忆，并且用它编程容易出差错。</li>
+<li>用它编写的程序一经输入计算机，CPU直接读取运行，因此和其他语言编的程序相比，执行速度最快。</li>
+<li>机器指令与CPU紧密相关，所以不同种类的CPU所对应的机器指令也就不同。</li>
+</ul>
+<p><strong>指令</strong></p>
+<ul>
+<li>由于机器码是有0和1组成的二进制序列，可读性实在太差，于是人们发明了指令。</li>
+<li>指令就是把机器码中特定的0和1序列，简化成对应的指令（一般为英文简写，如mov，inc等），可读性稍好</li>
+<li>由于不同的硬件平台，执行同一个操作，对应的机器码可能不同，所以不同的硬件平台的同一种指令（比如mov），对应的机器码也可能不同。</li>
+</ul>
+<p><strong>指令集</strong></p>
+<ul>
+<li><p>不同的硬件平台，各自支持的指令，是有差别的。因此每个平台所支持的指令，称之为对应平台的指令集。</p>
+</li>
+<li><p>如常见的</p>
+<p>x86指令集，对应的是x86架构的平台</p>
+<p>ARM指令集，对应的是ARM架构的平台</p>
+</li>
+</ul>
+<p><strong>汇编语言</strong></p>
+<ul>
+<li><p>由于指令的可读性还是太差，于是人们又发明了汇编语言。</p>
+</li>
+<li><p>在汇编语言中，用助记符（Mnemonics）代替机器指令的操作码，用地址符号（Symbol）或标号（Label）代替指令或操作数的地址。</p>
+</li>
+<li><p>在不同的硬件平台，汇编语言对应着不同的机器语言指令集，通过汇编过程转换成机器指令。</p>
+<p>由于计算机只认识指令码，所以用汇编语言编写的程序还必须翻译成机器指令码，计算机才能识别和执行。</p>
+</li>
+</ul>
+<p><strong>高级语言</strong></p>
+<ul>
+<li>为了使计算机用户编程序更容易些，后来就出现了各种高级计算机语言。高级语言比机器语言、汇编语言更接近人的语言。</li>
+<li>当计算机执行高级语言编写的程序时，仍然需要把程序解释和编译成机器的指令码。完成这个过程的程序就叫做解释程序或编译程序。</li>
+</ul>
+<p><img src="/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830204703047.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830204703047"></p>
+<p><strong>字节码</strong></p>
+<ul>
+<li><p>字节码是一种中间状态（中间码）的二进制代码（文件），它比机器码更抽象，需要直译器转译后才能成为机器码</p>
+</li>
+<li><p>字节码主要为了实现特定软件运行和软件环境、与硬件环境无关。</p>
+</li>
+<li><p>字节码的实现方式是通过编译器和虚拟机器。编译器将源码编译成字节码，特定平台上的虚拟机器将字节码转译为可以直接执行的指令。</p>
+<p>字节码的典型应用为Java bytecode</p>
+</li>
+</ul>
+<p><strong>C、C++源程序执行过程</strong></p>
+<p>编译过程又可以分成两个阶段：编译和汇编。</p>
+<ul>
+<li>编译过程：是读取源程序（字符流），对 之进行词法和语法的分析，将高级语言指令转换为功能等效的汇编代码</li>
+<li>汇编过程：实际上指把汇编语言代码翻译成目标机器指令的过程。</li>
+</ul>
+<h4 id="解释器"><a href="#解释器" class="headerlink" title="解释器"></a>解释器</h4><p><img src="/2022/09/14/JVM05-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E/image-20220830205043732.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220830205043732"></p>
+<p>&#x3D;&gt;	JVM设计者们的初衷仅仅只是单纯地为了&#x3D;&#x3D;满足Java程序实现跨平台特性&#x3D;&#x3D;，因此避免采用静态编译的方式直接生成本地机器指令，从而诞生了实现解释器在运行时采用逐行解释字节码执行程序的想法。</p>
+<ul>
+<li>解释器真正意义上所承担的角色就是一个运行时“翻译者”，将字节码文件中的内容“翻译”为对应平台的本地机器指令执行。</li>
+<li>当一条字节码指令被解释执行完成后，接着再根据PC寄存器中记录的下一条需要被执行的字节码指令执行解释操作。</li>
+</ul>
+<p><strong>在Java的发展历史里，一共有两套解释执行器，即古老的字节码解释器、现在普遍使用的模板解释器。</strong></p>
+<p>字节码解释器在执行时通过纯软件代码模拟字节码的执行，效率非常低下。而模板解释器将每一条字节码和一个模板函数相关联，模板函数中直接产生这条字节码执行时的机器码，从而很大程度上提高了解释器的性能。</p>
+<p>在HotSpot VM中，解释器主要由Interpreter模块和Code模块构成。</p>
+<ul>
+<li>Interpreter模块：实现了解释器的核心功能</li>
+<li>Code模块：用于管理HotSpot VM在运行时生成的本地机器指令</li>
+</ul>
+<blockquote>
+<p><strong>现状</strong> &#x3D;&#x3D;&#x3D;&gt;</p>
+<p>由于解释器在设计和实现上非常简单，因此除了Java语言之外，还有许多高级语言同样也是基于解释器执行的，比如Python、 Perl、Ruby等。但是在今天，基于解释器执行已经沦落为低效的代名词，并且时常被一些C&#x2F;C+ +程序员所调侃。</p>
+<p>为了解决这个问题，JVM平台支持一种叫作即时编译的技术。即时编译的目的是避免函数被解释执行，而是将整个函数体编译成为机器码，每次函数执行时，只执行编译后的机器码即可，这种方式可以使执行效率大幅度提升。</p>
+<p>不过无论如何，基于解释器的执行模式仍然为中间语言的发展做出了不可磨灭的贡献。</p>
+</blockquote>
+<h4 id="JIT编译器"><a href="#JIT编译器" class="headerlink" title="JIT编译器"></a>JIT编译器</h4><p>&#x3D;&gt;	Java 语言的“编译器” 其实是一段“不确定”的操作过程，因为它可能是指一个前端编译器（其实叫“编译器的前端” 更准确一些）把.java文件转变成.class文件的过程；<br>也可能是指虚拟机的后端运行期编译器（JIT 编译器，Just In Time Compiler）把字节码转变成机器码的过程。<br>还可能是指使用静态提前编译器（AOT 编译器，Ahead Of Time Compiler）直接把. java文件编译成本地机器代码的过程。</p>
+<ul>
+<li>前端编译器： Sun的Javac、 Eclipse JDT中的增量式编译器（ECJ）</li>
+<li>JIT编译器： HotSpot VM的C1、C2编译器。</li>
+<li>AOT编译器： GNU Compiler for the Java （GCJ） 、Excelsior JET。</li>
+</ul>
+<h4 id="Graal编译器"><a href="#Graal编译器" class="headerlink" title="Graal编译器"></a>Graal编译器</h4><ul>
+<li>自JDK10起，HotSpot又加入一个全新的即时编译器： Graal编译器</li>
+<li>编译效果短短几年时间就追评了C2编译器。未来可期。</li>
+<li>目前，带着“实验状态”标签，需要使用开关参数 -XX： +UnlockExperimentalVMOptions 一XX： +UseJVMCICompiler去激活，才可以使用。</li>
+</ul>
+<h4 id="AOT编译器"><a href="#AOT编译器" class="headerlink" title="AOT编译器"></a>AOT编译器</h4><ul>
+<li>jdk9引入了AOT编译器（静态提前编译器，Ahead Of Time Compiler）</li>
+<li>Java 9引入了实验性AOT编译工具jaotc。它借助了Graal 编译器，将所输入的Java 类文件转换为机器码，并存放至生成的动态共享库之中。</li>
+<li>所谓AOT编译，是与即时编译相对立的一个概念。我们知道，即时编译指的是在程序的运行过程中，将字节码转换为可在硬件上直接运行的机器码，并部署至托管环境中的过程。而AOT编译指的则是，在程序运行之前，便将字节码转换为机器码的过程。</li>
+</ul>
+<p><strong>最大好处：</strong></p>
+<pre><code class="hljs"> Java虚拟机加载已经预编译成二进制库，可以直接执行。不必等待即时编译器的预热，减少Java应用给人带来“第一次运行慢”的不良体验。
+</code></pre>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>破坏了java”一次编译，到处运行”，必须为每个不同硬件、oS编译对应的发行包。</li>
+<li>降低了Java链接过程的动态性，加载的代码在编译期就必须全部已知。</li>
+<li>还需要继续优化中，最初只支持Linux x64 java base</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/Blog/tags/JVM/">#JVM</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>JVM05-执行引擎</div>
+      <div>https://he498.github.io/Blog/2022/09/14/JVM05-执行引擎/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>he498</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年9月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Blog/2022/09/14/JVM06-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6/" title="JVM06-垃圾回收机制">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">JVM06-垃圾回收机制</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Blog/2022/09/14/JVM04-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA02/" title="JVM04-运行时数据区02">
+                        <span class="hidden-mobile">JVM04-运行时数据区02</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <i class="iconfont icon-love"></i> <a href="https://github.com/he498" target="_blank" rel="nofollow noopener"><span>GitHub</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Blog/js/events.js" ></script>
+<script  src="/Blog/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/Blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

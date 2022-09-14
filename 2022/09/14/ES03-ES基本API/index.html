@@ -1,0 +1,881 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
+  <link rel="icon" href="/Blog/img/icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="he498">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Rest风格说明   method url地址 描述    PUT localhost:9200&#x2F;索引名称&#x2F;类型名称&#x2F;文档id 创建文档（指定文档id）   POST localhost:9200&#x2F;索引名称&#x2F;类型名称 创建文档（随机文档id）   POST localhost:9200&#x2F;索引名称&#x2F;类型名称&#x2F;文档id&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ES03-ES基本API">
+<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/index.html">
+<meta property="og:site_name" content="Ming&#39;s blog">
+<meta property="og:description" content="Rest风格说明   method url地址 描述    PUT localhost:9200&#x2F;索引名称&#x2F;类型名称&#x2F;文档id 创建文档（指定文档id）   POST localhost:9200&#x2F;索引名称&#x2F;类型名称 创建文档（随机文档id）   POST localhost:9200&#x2F;索引名称&#x2F;类型名称&#x2F;文档id&amp;#">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904233023179.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904233115700.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904233729140.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904234002468.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904234149355.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904234232741.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904234548404.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904234845866.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904235032899.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904235136205.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905094010670.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905094423401.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905094517652.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905094808703.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905095203840.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905095621216.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905100101774.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905100358752.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905100927657.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905101111381.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905101403038.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905101544500.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905125859977.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905130052812.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905130231870.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905130535269.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905131045757.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905132151595.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905132226014.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905132826091.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905133142587.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905133427648.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905164637776.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905164742899.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905165049407.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905165258085.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905165334922.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905170610932.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905171214792.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905220523382.png">
+<meta property="article:published_time" content="2022-09-13T17:23:58.000Z">
+<meta property="article:modified_time" content="2022-09-13T17:31:35.048Z">
+<meta property="article:author" content="he498">
+<meta property="article:tag" content="Elasticsearch">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://he498.github.io/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904233023179.png">
+  
+  
+  
+  <title>ES03-ES基本API - Ming&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/Blog/js/utils.js" ></script>
+  <script  src="/Blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Blog/">
+      <strong>Ming&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="ES03-ES基本API"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-14 01:23" pubdate>
+          2022年9月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.9k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">ES03-ES基本API</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Rest风格说明"><a href="#Rest风格说明" class="headerlink" title="Rest风格说明"></a>Rest风格说明</h2><table>
+<thead>
+<tr>
+<th>method</th>
+<th>url地址</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PUT</td>
+<td>localhost:9200&#x2F;索引名称&#x2F;类型名称&#x2F;文档id</td>
+<td>创建文档（指定文档id）</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>localhost:9200&#x2F;索引名称&#x2F;类型名称</td>
+<td>创建文档（随机文档id）</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>localhost:9200&#x2F;索引名称&#x2F;类型名称&#x2F;文档id&#x2F;_update</td>
+<td>修改文档</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>localhost:9200&#x2F;索引名称&#x2F;类型名称&#x2F;文档id</td>
+<td>删除文档</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>localhost:9200&#x2F;索引名称&#x2F;类型名称&#x2F;文档id</td>
+<td>查询文档通过文档id</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>localhost:9200&#x2F;索引名称&#x2F;类型名称&#x2F;_search</td>
+<td>查询所有数据</td>
+</tr>
+</tbody></table>
+<h4 id="索引基础操作测试"><a href="#索引基础操作测试" class="headerlink" title="索引基础操作测试"></a>索引基础操作测试</h4><p>1、创建一个索引</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs awk">PUT <span class="hljs-regexp">/索引名/</span>~类型名~/文档id<br>&#123;请求体&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904233023179.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904233023179"></p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904233115700.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904233115700"></p>
+<p>完成了自动增加了索引，数据也成功添加了</p>
+<p><strong>数据类型</strong></p>
+<ul>
+<li><p>字符串类型</p>
+<p>text、keyword</p>
+</li>
+<li><p>数值类型</p>
+<p>long,integer,short,byte,double,float,half float,scaled float</p>
+</li>
+<li><p>日期类型</p>
+<p>date</p>
+</li>
+<li><p>布尔值类型</p>
+<p>boolean</p>
+</li>
+<li><p>二进制类型</p>
+<p>binary</p>
+</li>
+<li><p>…..</p>
+</li>
+</ul>
+<p>2、指定字段类型创建索引</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904233729140.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904233729140"></p>
+<p>3、通过GET请求获得具体的信息</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904234002468.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904234002468"></p>
+<p>4、查看默认的信息</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904234149355.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904234149355"></p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904234232741.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904234232741"></p>
+<p>如果自己的文档字段没有指定，那么es就会给我们默认配置字段类型</p>
+<p>5、通过命令elasticsearch索引情况</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904234548404.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904234548404"></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">GET</span> _cat/<span class="hljs-built_in">..</span><span class="hljs-built_in">..</span><br></code></pre></td></tr></table></figure>
+
+<p>6、修改索引</p>
+<p>覆盖的方式：</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904234845866.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904234845866"></p>
+<p>更新的方式：</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904235032899.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904235032899"></p>
+<p>7、删除索引</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220904235136205.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220904235136205"></p>
+<p>通过DELETE命令实现删除对应的索引或文档记录。</p>
+<h4 id="文档的基础操作"><a href="#文档的基础操作" class="headerlink" title="文档的基础操作"></a>文档的基础操作</h4><p>1、添加数据</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs awk">PUT <span class="hljs-regexp">/ming/u</span>ser/<span class="hljs-number">1</span><br>&#123;<br>  <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;ming&quot;</span>,<br>  <span class="hljs-string">&quot;age&quot;</span>: <span class="hljs-number">6</span>,<br>  <span class="hljs-string">&quot;desc&quot;</span>: <span class="hljs-string">&quot;6666&quot;</span>,<br>  <span class="hljs-string">&quot;tags&quot;</span>: [<span class="hljs-string">&quot;技术宅&quot;</span>,<span class="hljs-string">&quot;温暖&quot;</span>,<span class="hljs-string">&quot;直男&quot;</span>]<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905094010670.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905094010670"></p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905094423401.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905094423401"></p>
+<p>2、获取数据</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">GET ming<span class="hljs-regexp">/user/</span><span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905094517652.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905094517652"></p>
+<p>3、更新数据 		PUT</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905094808703.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905094808703"></p>
+<p>4、POST 更新数据（现在推荐使用这种更新方式）</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs awk">POST <span class="hljs-regexp">/ming/u</span>ser<span class="hljs-regexp">/1/</span>_update<br>&#123;<br>  <span class="hljs-string">&quot;doc&quot;</span>:&#123;<br>    <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;ming爱Java&quot;</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905095203840.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905095203840"></p>
+<p><strong>注意：记得在后面加上&#x2F;_update</strong> ，否则其他没有修改或设置的数据将会被设为空值</p>
+<h5 id="搜索操作"><a href="#搜索操作" class="headerlink" title="搜索操作"></a><strong>搜索操作</strong></h5><p>1、简单的搜索操作</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">GET ming<span class="hljs-regexp">/user/</span><span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<p>2、简单的条件查询</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">GET</span> ming/user/_search?<span class="hljs-attribute">q</span>=name:ming爱java<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905095621216.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905095621216"></p>
+<p>简单的条件查询，可以根据默认的映射规则，产生基本的查询</p>
+<p>3、复杂的操作查询 select (排序、分页、高亮、模糊查询、精准查询)</p>
+<img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905100101774.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905100101774" style="zoom:67%;">
+
+<p>这里的score为匹配度，如果存在多条查询的数据，这个分值越高则匹配度越高。</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905100358752.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905100358752"></p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905100927657.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905100927657"></p>
+<p><strong>结果过滤查询：</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs awk">GET ming<span class="hljs-regexp">/user/</span>_search<br>&#123;<br>  <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;狂神&quot;</span><br>    &#125;<br>  &#125;,<br>  <span class="hljs-string">&quot;_source&quot;</span>: [<span class="hljs-string">&quot;name&quot;</span>,<span class="hljs-string">&quot;desc&quot;</span>]<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905101111381.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905101111381"></p>
+<p><strong>排序查询：</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-regexp">//</span>升序<br>GET ming<span class="hljs-regexp">/user/</span>_search<br>&#123;<br>  <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;狂神&quot;</span><br>    &#125;<br>  &#125;,<br>  <span class="hljs-string">&quot;sort&quot;</span>: [<br>    &#123;<br>      <span class="hljs-string">&quot;age&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;order&quot;</span>: <span class="hljs-string">&quot;desc&quot;</span><br>      &#125;<br>    &#125;<br>  ]<br>&#125;<br><span class="hljs-regexp">//</span>降序<br>GET ming<span class="hljs-regexp">/user/</span>_search<br>&#123;<br>  <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;狂神&quot;</span><br>    &#125;<br>  &#125;,<br>  <span class="hljs-string">&quot;sort&quot;</span>: [<br>    &#123;<br>      <span class="hljs-string">&quot;age&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;order&quot;</span>: <span class="hljs-string">&quot;asc&quot;</span><br>      &#125;<br>    &#125;<br>  ]<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905101403038.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905101403038"></p>
+<p><strong>分页查询：</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs awk">GET ming<span class="hljs-regexp">/user/</span>_search<br>&#123;<br>  <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;狂神&quot;</span><br>    &#125;<br>  &#125;,<br>  <span class="hljs-string">&quot;sort&quot;</span>: [<br>    &#123;<br>      <span class="hljs-string">&quot;age&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;order&quot;</span>: <span class="hljs-string">&quot;asc&quot;</span><br>      &#125;<br>    &#125;<br>  ],<br>  <span class="hljs-string">&quot;from&quot;</span>: <span class="hljs-number">0</span>,<br>  <span class="hljs-string">&quot;size&quot;</span>: <span class="hljs-number">1</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905101544500.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905101544500"></p>
+<p>注意：数据下标从0开始</p>
+<p>前端接受请求？&#x3D;&gt; &#x2F;search&#x2F;{current}&#x2F;{pagesize}</p>
+<p><strong>布尔值查询：</strong></p>
+<p>多条件查询 must</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905125859977.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905125859977"></p>
+<p>多条件查询 or</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905130052812.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905130052812"></p>
+<p>must_not</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905130231870.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905130231870"></p>
+<p><strong>过滤器</strong></p>
+<p>&#x3D;&gt; 使用filter 进行数据过滤</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905130535269.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905130535269"></p>
+<ul>
+<li>gt 大于</li>
+<li>gte 大于等于</li>
+<li>lt 小于</li>
+<li>lte 小于等于</li>
+</ul>
+<p><strong>匹配多个条件查询</strong></p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905131045757.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905131045757"></p>
+<p><strong>精确查询</strong></p>
+<p>&#x3D;&gt; term 查询直接通过倒排索引指定的词条进行精确的查找</p>
+<ul>
+<li>term，直接查询精确的</li>
+<li>match,会使用分词器解析！（先分析文档，然后通过分析的文档进行查询）</li>
+</ul>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905132151595.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905132151595"></p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905132226014.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905132226014"></p>
+<p><strong>keyword 字段不会被分词器解析！</strong></p>
+<p><strong>多个值匹配精度查询</strong></p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">GET</span> testdb/_search<br>&#123;<br>  <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;bool&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;should&quot;</span>: [<br>        &#123;<br>          <span class="hljs-string">&quot;term&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;t1&quot;</span>: <span class="hljs-string">&quot;22&quot;</span><br>          &#125;<br>        &#125;,<br>        &#123;<br>          <span class="hljs-string">&quot;term&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;t1&quot;</span>: <span class="hljs-string">&quot;33&quot;</span><br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905132826091.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905132826091"></p>
+<p><strong>高亮查询</strong></p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs awk">GET ming<span class="hljs-regexp">/user/</span>_search<br>&#123;<br>  <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;张三&quot;</span><br>    &#125;<br>  &#125;,<br>  <span class="hljs-string">&quot;highlight&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;fields&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;name&quot;</span>: &#123;&#125;<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905133142587.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905133142587"></p>
+<p>自定义高亮：</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905133427648.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905133427648"></p>
+<h2 id="集成SpringBoot"><a href="#集成SpringBoot" class="headerlink" title="集成SpringBoot"></a>集成SpringBoot</h2><p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905164637776.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905164637776"></p>
+<p>文档地址：<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/index.html">https://www.elastic.co/guide/index.html</a></p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905164742899.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905164742899"></p>
+<p><strong>Elasticsearch Clients:</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/client/index.html">https://www.elastic.co/guide/en/elasticsearch/client/index.html</a></p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905165049407.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905165049407"></p>
+<p>这里我们一般使用Java REST Client</p>
+<p>一般选择高级客户端</p>
+<p>文档地址：</p>
+<p><a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/client/java-rest/7.6/java-rest-high-compatibility.html">https://www.elastic.co/guide/en/elasticsearch/client/java-rest/7.6/java-rest-high-compatibility.html</a></p>
+<p><strong>原生依赖</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.elasticsearch.client<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>elasticsearch-rest-high-level-client<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>7.6.2<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905165258085.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905165258085"></p>
+<p><strong>对象的初始化</strong></p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905165334922.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905165334922"></p>
+<p><strong>这个类中的基本方法</strong></p>
+<h4 id="配置springboot"><a href="#配置springboot" class="headerlink" title="配置springboot"></a>配置springboot</h4><p>问题1：注意springboot自动导入的es依赖版本要和本地的版本一致</p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905170610932.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905170610932"></p>
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905171214792.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905171214792"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/*</span><br><span class="hljs-comment">1、找对象</span><br><span class="hljs-comment">2、放到spring 中待用</span><br><span class="hljs-comment">3、分析源码</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Configuration</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ElasticsearchClientConfig</span> &#123;<br>    <span class="hljs-meta">@Bean</span><br>    <span class="hljs-keyword">public</span> RestHighLevelClient <span class="hljs-title function_">restHighLevelClient</span><span class="hljs-params">()</span>&#123;<br>        <span class="hljs-type">RestHighLevelClient</span> <span class="hljs-variable">client</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RestHighLevelClient</span>(<br>                RestClient.builder(<br>                        <span class="hljs-keyword">new</span> <span class="hljs-title class_">HttpHost</span>(<span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-number">9200</span>, <span class="hljs-string">&quot;http&quot;</span>)));<br>        <span class="hljs-keyword">return</span> client;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="API测试"><a href="#API测试" class="headerlink" title="API测试"></a>API测试</h4><p>1、创建索引</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 测试索引的创建</span><br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">testCreatIndex</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        <span class="hljs-comment">//1、创建索引请求</span><br>        <span class="hljs-type">CreateIndexRequest</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">CreateIndexRequest</span>(<span class="hljs-string">&quot;ming_index&quot;</span>);<br>        <span class="hljs-comment">//2、客户端执行请求 indicesClient</span><br>        <span class="hljs-type">CreateIndexResponse</span> <span class="hljs-variable">createIndexResponse</span> <span class="hljs-operator">=</span> restHighLevelClient.indices().create(request, RequestOptions.DEFAULT);<br>        System.out.println(createIndexResponse);<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>2、判断索引是否存在</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//测试获取索引</span><br><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">testExistIndex</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>    <span class="hljs-type">GetIndexRequest</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">GetIndexRequest</span>(<span class="hljs-string">&quot;ming_index&quot;</span>);<br>    <span class="hljs-type">boolean</span> <span class="hljs-variable">exists</span> <span class="hljs-operator">=</span> restHighLevelClient.indices().exists(request, RequestOptions.DEFAULT);<br>    System.out.println(exists);<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>3、删除索引</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//测试删除索引</span><br><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">testDeleteIndex</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>    <span class="hljs-type">DeleteIndexRequest</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DeleteIndexRequest</span>(<span class="hljs-string">&quot;ming_index&quot;</span>);<br>    <span class="hljs-type">AcknowledgedResponse</span> <span class="hljs-variable">response</span> <span class="hljs-operator">=</span> restHighLevelClient.indices().delete(request, RequestOptions.DEFAULT);<br>    System.out.println(response);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p>4、CRUD文档</p>
+<p><strong>创建文档</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br>   <span class="hljs-keyword">void</span> <span class="hljs-title function_">testAddDocument</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>       <span class="hljs-comment">//创建对象</span><br>       <span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-string">&quot;ming&quot;</span>,<span class="hljs-number">3</span>);<br>       <span class="hljs-comment">//创建请求</span><br>       <span class="hljs-type">IndexRequest</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">IndexRequest</span>(<span class="hljs-string">&quot;ming_index&quot;</span>);<br>       <span class="hljs-comment">// 规则 put /ming_index/_doc/1</span><br>       request.id(<span class="hljs-string">&quot;1&quot;</span>);<br>       request.timeout(TimeValue.timeValueSeconds(<span class="hljs-number">1</span>));<br>       request.timeout(<span class="hljs-string">&quot;1s&quot;</span>);<br>       <span class="hljs-comment">//将我们的数据放入请求 json</span><br>       request.source(JSON.toJSONString(user), XContentType.JSON);<br>       <span class="hljs-comment">//客户端发送请求</span><br>       <span class="hljs-type">IndexResponse</span> <span class="hljs-variable">index</span> <span class="hljs-operator">=</span> restHighLevelClient.index(request, RequestOptions.DEFAULT);<br>       System.out.println(index.toString());<br>       System.out.println(index.status());<br><br>   &#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<p><img src="/2022/09/14/ES03-ES%E5%9F%BA%E6%9C%ACAPI/image-20220905220523382.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220905220523382"></p>
+<p><strong>查询文档是否存在</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//获取文档判断是否存在</span><br>  <span class="hljs-meta">@Test</span><br>  <span class="hljs-keyword">void</span> <span class="hljs-title function_">testIsExistsDocument</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>      <span class="hljs-type">GetRequest</span> <span class="hljs-variable">getRequest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">GetRequest</span>(<span class="hljs-string">&quot;ming_index&quot;</span>, <span class="hljs-string">&quot;1&quot;</span>);<br>      <span class="hljs-comment">//不获取返回的 _source的上下文</span><br>      getRequest.fetchSourceContext(<span class="hljs-keyword">new</span> <span class="hljs-title class_">FetchSourceContext</span>(<span class="hljs-literal">false</span>));<br>      getRequest.storedFields(<span class="hljs-string">&quot;_none_&quot;</span>);<br>      <span class="hljs-type">boolean</span> <span class="hljs-variable">exists</span> <span class="hljs-operator">=</span> restHighLevelClient.exists(getRequest, RequestOptions.DEFAULT);<br>      System.out.println(exists);<br><br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>查询文档信息</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//获取文档信息</span><br><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">testGetDocument</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>    <span class="hljs-type">GetRequest</span> <span class="hljs-variable">getRequest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">GetRequest</span>(<span class="hljs-string">&quot;ming_index&quot;</span>, <span class="hljs-string">&quot;1&quot;</span>);<br>    <span class="hljs-type">GetResponse</span> <span class="hljs-variable">getResponse</span> <span class="hljs-operator">=</span> restHighLevelClient.get(getRequest, RequestOptions.DEFAULT);<br>    System.out.println(getResponse.getSourceAsString());<span class="hljs-comment">//打印文档内容</span><br>    System.out.println(getResponse); <span class="hljs-comment">//返回的全部内容和命令式一样的</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>更新文档的信息</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//更新文档的信息</span><br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">testUpdateDocument</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        <span class="hljs-type">UpdateRequest</span> <span class="hljs-variable">updateRequest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">UpdateRequest</span>(<span class="hljs-string">&quot;ming_index&quot;</span>,<span class="hljs-string">&quot;1&quot;</span>);<br>        updateRequest.timeout(<span class="hljs-string">&quot;1s&quot;</span>);<br><br>        <span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-string">&quot;ming6&quot;</span>, <span class="hljs-number">18</span>);<br>        updateRequest.doc(JSON.toJSONString(user), XContentType.JSON);<br><br>        <span class="hljs-type">UpdateResponse</span> <span class="hljs-variable">updateResponse</span> <span class="hljs-operator">=</span> restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);<br>        System.out.println(updateResponse.status());<br><br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>删除文档</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">testDeleteDocument</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>    <span class="hljs-type">DeleteRequest</span> <span class="hljs-variable">request</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">DeleteRequest</span>(<span class="hljs-string">&quot;ming_index&quot;</span>, <span class="hljs-string">&quot;1&quot;</span>);<br>    request.timeout(<span class="hljs-string">&quot;1s&quot;</span>);<br><br>    <span class="hljs-type">DeleteResponse</span> <span class="hljs-variable">deleteResponse</span> <span class="hljs-operator">=</span> restHighLevelClient.delete(request, RequestOptions.DEFAULT);<br>    System.out.println(deleteResponse.status());<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>批量插入</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//批量插入数据</span><br><span class="hljs-meta">@Test</span><br><span class="hljs-keyword">void</span> <span class="hljs-title function_">testBulkRequest</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>    <span class="hljs-type">BulkRequest</span> <span class="hljs-variable">bulkRequest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">BulkRequest</span>();<br>    bulkRequest.timeout(<span class="hljs-string">&quot;10s&quot;</span>);<br>    ArrayList&lt;User&gt; userList = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>    userList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-string">&quot;ming1&quot;</span>,<span class="hljs-number">3</span>));<br>    userList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-string">&quot;ming2&quot;</span>,<span class="hljs-number">4</span>));<br>    userList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-string">&quot;ming3&quot;</span>,<span class="hljs-number">5</span>));<br>    userList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-string">&quot;ming4&quot;</span>,<span class="hljs-number">6</span>));<br>    userList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-string">&quot;ming5&quot;</span>,<span class="hljs-number">7</span>));<br>    userList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>(<span class="hljs-string">&quot;ming6&quot;</span>,<span class="hljs-number">8</span>));<br>    <span class="hljs-comment">//批处理请求</span><br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; userList.size(); i++)&#123;<br>        <span class="hljs-comment">// 批量更新和批量删除，就在这里修改对应请求即可</span><br>        bulkRequest.add(<br>                <span class="hljs-keyword">new</span> <span class="hljs-title class_">IndexRequest</span>(<span class="hljs-string">&quot;ming_index&quot;</span>)<br>                        .id(<span class="hljs-string">&quot;&quot;</span>+(i+<span class="hljs-number">1</span>))<br>                        .source(JSON.toJSONString(userList.get(i)),XContentType.JSON)<br>        );<br>    &#125;<br>    <span class="hljs-type">BulkResponse</span> <span class="hljs-variable">bulk</span> <span class="hljs-operator">=</span> restHighLevelClient.bulk(bulkRequest, RequestOptions.DEFAULT);<br>    System.out.println(bulk.hasFailures());<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>查询操作</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java">    <span class="hljs-comment">//查询</span><br>    <span class="hljs-comment">//SearchRequest 搜索请求</span><br>    <span class="hljs-comment">//SearchSourceBuilder 条件构造</span><br>    <span class="hljs-comment">//HighlightBuilder 构建高亮</span><br>    <span class="hljs-comment">//TermQueryBuilder 精确查询</span><br>    <span class="hljs-comment">//MatchAllQueryBuilder 匹配所有</span><br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-keyword">void</span> <span class="hljs-title function_">testSearch</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException &#123;<br>        <span class="hljs-type">SearchRequest</span> <span class="hljs-variable">searchRequest</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SearchRequest</span>(<span class="hljs-string">&quot;ming_index&quot;</span>);<br>        <span class="hljs-comment">//构建搜索条件 ？高亮、排序、...</span><br>        <span class="hljs-type">SearchSourceBuilder</span> <span class="hljs-variable">sourceBuilder</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">SearchSourceBuilder</span>();<br>        <span class="hljs-comment">//查询条件  可以使用QueryBuilders 工具类来快速实现</span><br>        <span class="hljs-comment">//QueryBuilders.termQuery 精确匹配</span><br>        <span class="hljs-comment">//QueryBuilders.matchAllQuery 匹配所有</span><br>        <span class="hljs-type">TermQueryBuilder</span> <span class="hljs-variable">termQueryBuilder</span> <span class="hljs-operator">=</span> QueryBuilders.termQuery(<span class="hljs-string">&quot;name&quot;</span>, <span class="hljs-string">&quot;ming1&quot;</span>);<br><br>        sourceBuilder.query(termQueryBuilder);<br><span class="hljs-comment">//        sourceBuilder.from(); 分页</span><br><span class="hljs-comment">//        sourceBuilder.size();</span><br>        sourceBuilder.timeout(<span class="hljs-keyword">new</span> <span class="hljs-title class_">TimeValue</span>(<span class="hljs-number">60</span>, TimeUnit.SECONDS));<br><br>        searchRequest.source(sourceBuilder);<br><br>        <span class="hljs-type">SearchResponse</span> <span class="hljs-variable">searchResponse</span> <span class="hljs-operator">=</span> restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);<br>        System.out.println(JSON.toJSONString(searchResponse.getHits()));<span class="hljs-comment">//所有的信息都在hits中</span><br>        System.out.println(<span class="hljs-string">&quot;===========================&quot;</span>);<br>        <span class="hljs-keyword">for</span> (SearchHit documentFields : searchResponse.getHits().getHits()) &#123;<br>            System.out.println(documentFields.getSourceAsMap());<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="京东搜索项目"><a href="#京东搜索项目" class="headerlink" title="京东搜索项目"></a>京东搜索项目</h2><p>使用了jsoup爬虫以及ES搜索 demo参考地址：<a target="_blank" rel="noopener" href="https://github.com/he498/ElasticSearch_study/tree/master">https://github.com/he498/ElasticSearch_study/tree/master</a></p>
+<p>参考于bilibili up主：遇见狂神说</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/Blog/tags/Elasticsearch/">#Elasticsearch</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>ES03-ES基本API</div>
+      <div>https://he498.github.io/Blog/2022/09/14/ES03-ES基本API/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>he498</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年9月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Blog/2022/09/14/ES02-ES%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E5%8F%8AIK%E5%88%86%E8%AF%8D%E5%99%A8/" title="ES02-ES核心概念及IK分词器">
+                        <span class="hidden-mobile">ES02-ES核心概念及IK分词器</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <i class="iconfont icon-love"></i> <a href="https://github.com/he498" target="_blank" rel="nofollow noopener"><span>GitHub</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Blog/js/events.js" ></script>
+<script  src="/Blog/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/Blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

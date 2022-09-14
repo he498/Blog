@@ -1,0 +1,770 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/Blog/img/fluid.png">
+  <link rel="icon" href="/Blog/img/icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="he498">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="6、高效并发Java内存模型？&#x3D;&gt;	 ​	 JVM虚拟机规范中曾经试图定义一种Java内存模型，来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都可以达到一致性的内存访问效果。  然而定义这样一套内存模型并非很容易，这个模型必须足够严谨，才能让Java的并发内存访问操作不会有歧义。但是也必须足够宽松，这样使得虚拟机的具体实现能够有自由的发挥空间来利用各种硬">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM08-高效并发">
+<meta property="og:url" content="https://he498.github.io/Blog/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/index.html">
+<meta property="og:site_name" content="Ming&#39;s blog">
+<meta property="og:description" content="6、高效并发Java内存模型？&#x3D;&gt;	 ​	 JVM虚拟机规范中曾经试图定义一种Java内存模型，来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都可以达到一致性的内存访问效果。  然而定义这样一套内存模型并非很容易，这个模型必须足够严谨，才能让Java的并发内存访问操作不会有歧义。但是也必须足够宽松，这样使得虚拟机的具体实现能够有自由的发挥空间来利用各种硬">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902174248045.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902175804414.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902180157064.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902180659795.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902183256865.png">
+<meta property="og:image" content="https://he498.github.io/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902183600277.png">
+<meta property="article:published_time" content="2022-09-13T16:21:39.000Z">
+<meta property="article:modified_time" content="2022-09-13T16:23:46.850Z">
+<meta property="article:author" content="he498">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://he498.github.io/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902174248045.png">
+  
+  
+  
+  <title>JVM08-高效并发 - Ming&#39;s blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/Blog/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/Blog/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/Blog/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"he498.github.io","root":"/Blog/","version":"1.9.3","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/Blog/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/Blog/js/utils.js" ></script>
+  <script  src="/Blog/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/Blog/">
+      <strong>Ming&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/Blog/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/Blog/img/default2.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="JVM08-高效并发"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-09-14 00:21" pubdate>
+          2022年9月14日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          6k 字
+        
+      </span>
+    
+
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">JVM08-高效并发</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="6、高效并发"><a href="#6、高效并发" class="headerlink" title="6、高效并发"></a>6、高效并发</h2><h4 id="Java内存模型？"><a href="#Java内存模型？" class="headerlink" title="Java内存模型？"></a><strong>Java内存模型？</strong></h4><p>&#x3D;&gt;	</p>
+<p>​	 JVM虚拟机规范中曾经试图定义一种Java内存模型，来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都可以达到一致性的内存访问效果。</p>
+<pre><code class="hljs"> 然而定义这样一套内存模型并非很容易，这个模型必须足够严谨，才能让Java的并发内存访问操作不会有歧义。但是也必须足够宽松，这样使得虚拟机的具体实现能够有自由的发挥空间来利用各种硬件的优势。经过长时间的验证和弥补，到了JDK1.5（实现了JSR133规范）之后，Java内存模型才终于成熟起来了。
+</code></pre>
+<p><strong>主内存与工作内存</strong></p>
+<p>​	Java内存模型规定了所有的变量都存储在主内存(Main Memory)中，每条线程都有自己的工作内存（Work Memory）</p>
+<ul>
+<li>工作内存中保存了被该线程使用的变量的主内存副本。</li>
+<li>线程对变量的读写操作必须在工作内存中进行。</li>
+<li>而不能直接访问主内存的数据。</li>
+<li>不同的线程也不能互相读写对方的工作内存，线程之间的变量传递必须通过主内存传递。</li>
+</ul>
+<p><img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902174248045.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902174248045"></p>
+<p><strong>八大原子操作</strong></p>
+<ul>
+<li><strong>lock</strong> 锁定： 作用于主内存，将一个变量标识为线程独占状态</li>
+<li><strong>unlock</strong>: 解锁 ： 作用于主内存，将一个线程独占状态的变量释放</li>
+<li><strong>read</strong> 读取 ： 从主内存读取数据到工作内存，便于之后的load操作</li>
+<li><strong>load</strong> 载入： 把read读取操作从主内存中得到的变量放入工作内存的变量副本中</li>
+<li><strong>use</strong> 使用： 将工作内存中的变量传递给执行引擎 当虚拟机遇到一个需要使用变量值的字节码时，执行此操作</li>
+<li><strong>assign</strong>赋值： 将执行引擎中的值赋给工作内存的变量。 当虚拟机遇到一个赋值操作时，执行此操作</li>
+<li><strong>store</strong>存储： 将工作内存的值传递到主内存 ，便于之后的write操作</li>
+<li><strong>write</strong>写入：将store存储操作中从工作内存中获取的变量写入到主内存中</li>
+</ul>
+<p><strong>八大原子操作的规则</strong></p>
+<ul>
+<li>不允许read和load、store和write操作之一单独出现。也就是说不允许一个变量从主内存读取但是工作内存不接受，也不允许工作内存发起回写请求但是主内存不接受。</li>
+<li>不允许一个线程丢弃它的最近assign的操作，即变量在工作内存中改变了之后必须同步到主内存中。</li>
+<li>不允许一个线程无原因地（没有发生过任何assign操作）把数据从工作内存同步回主内存中。</li>
+<li>一个新的变量只能在主内存中诞生，不允许在工作内存中直接使用一个未被初始化（load或assign）的变量。即就是对一个变量实施use和store操作之前，必须先执行过了assign和load操作。</li>
+<li>一个变量在同一时刻只允许一条线程对其进行lock操作，但lock操作可以被同一条线程重复执行多次，多次执行lock后，只有执行相同次数的unlock操作，变量才会被解锁。lock和unlock必须成对出现</li>
+<li>如果对一个变量执行lock操作，将会清空工作内存中此变量的值，在执行引擎使用这个变量前需要重新执行load或assign操作初始化变量的值</li>
+<li>如果一个变量事先没有被lock操作锁定，则不允许对它执行unlock操作；也不允许去unlock一个被其他线程锁定的变量。</li>
+<li>对一个变量执行unlock操作之前，必须先把此变量同步到主内存中（执行store和write操作）。</li>
+</ul>
+<blockquote>
+<p><strong>Volatile、可见性、原子性、有序性等相关概念请翻阅JUC篇笔记</strong></p>
+</blockquote>
+<h4 id="Java线程模型"><a href="#Java线程模型" class="headerlink" title="Java线程模型"></a>Java线程模型</h4><p>&#x3D;&gt;	并发不一定都要用到线程，比如PHP中用到的是多进程。但是在Java中并发基本上都是使用线程来实现的。</p>
+<p><strong>线程的实现</strong></p>
+<p>&#x3D;&gt;	 主流的操作系统都提供了线程的实现，Java线程则提供了在不同硬件和操作系统下对线程的统一处理。每个已经start且并未结束的Thread类的实例对象都是一个线程。</p>
+<p>实现线程的三种主要方式</p>
+<ul>
+<li>内核线程 （1:1线程模型）</li>
+<li>用户线程 （1:N 线程模型）</li>
+<li>用户线程 + 轻量级进程 混合 （N:M 线程模型）</li>
+</ul>
+<p><strong>内核线程</strong></p>
+<p>​	内核线程(Kernel-Level Thread，KLT)是由操作系统内核直接支持的线程 。这种线程由内核来完成线程切换。内核通过操纵调度器对内核线程进行控制，并负责将线程的任务映射到各个处理器。</p>
+<p>​	 程序一般不会直接使用内核线程，而是使用它的高级接口：轻量级进程（LWP）。轻量级进程就是我们通常意义上讲的线程。每个轻量级进程都由一个内核线程支持。因此这种方式称为1:1的线程模型</p>
+<img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902175804414.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902175804414" style="zoom:80%;">
+
+<p><strong>用户线程</strong></p>
+<p>​	用户线程指完全建立在用户态的线程库中，用户线程的创建，同步，销毁，调度等操作完全在用户态中完成，不需要在频繁切换内核态。因此速度很快。很多高性能的数据库中的多线程就是用的用户线程。</p>
+<p>​	由于是一个进程对应多个用户线程，因此，线程模型是1:N的</p>
+<img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902180157064.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902180157064" style="zoom:80%;">
+
+<p><strong>缺点：</strong></p>
+<ul>
+<li>由于所有的线程操作都需要由用户处理，所以线程的创建，销毁，切换，调度都是用户需要考虑的问题。</li>
+<li>由于操作系统只将处理器的资源分配到进程程度，所以阻塞如何处理,多处理器如今分配资源等问题都需要由用户解决。</li>
+</ul>
+<blockquote>
+<p><strong>Java，Ruby等语言都使用过用户线程，但是最终都放弃了。</strong></p>
+</blockquote>
+<p><strong>用户线程 + 轻量级进程 混合</strong></p>
+<img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902180659795.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902180659795" style="zoom:80%;">
+
+<p>​	在这种情况下，既存在用户线程，又存在轻量级进程，用户线程的建立还是在用户态中，因此不需要频繁切换内核态，保证了速度的高效。轻量级进程为用户线程和内核线程的桥梁。这样可以使用内核提供的线程调度功能处理用户线程中存在的问题。用户线程和轻量级进程的比例是不确定的。因此是N:M的线程模型。</p>
+<h4 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h4><p>&#x3D;&gt;	当多个线程同时访问一个对象，如果不用考虑这些线程在运行环境下的调度和交替执行，也不需要考虑额外的同步，或者在调用方法时进行一些其他的协作，调用这个对象的行为都可以获得正确的结果。那么就称这个对象是线程安全的。</p>
+<p> 这个定义是严谨并且有可操作性的，他要求线程安全的代码都必须具备一个共同的特性。代码本身封装了所有必要的正确性保障手段（如互斥同步等）。令调用者无需关心多线程下的调用问题。更无需自己实现任何措施来保证安全。</p>
+<p><strong>Java中的线程安全</strong><br>     在Java语言中，从JVM底层来看的话，线程安全并不是一个非黑即白的二元排他选项，按照安全程度来划分，我们可以将Java中各种操作共享的数据分为五类: 不可变、绝对线程安全、相对线程安全、线程兼容、线程对立</p>
+<p><strong>不可变</strong><br>     在Java中，不可变的对象一定是安全的。比如用final修饰的变量。只要一个不可见的对象被创建出来，其外部的可见状态就不会改变，永远不会看到它在多个线程中处于不一致的状态。在Java中，不可变带来的线程安全是最直接的，也是最纯粹的。</p>
+<ul>
+<li><p>基本数据类型： 在定义的时候用final修饰即可。</p>
+</li>
+<li><p>引用数据类型：由于目前为止Java中还没有提供对应的支持，需要我们自己封装，将共享数据封装为一个不可变的对象，具体来说，我们可以把对象中的属性封装为final类型。这样在构造方法结束之后，他就是一个不可比变的值。</p>
+<p>比如String，Integer,Number,Long,Double等基本数据类型的包装类，都是将value部分修饰为final。</p>
+</li>
+</ul>
+<p> String的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">char</span> value[];<br></code></pre></td></tr></table></figure>
+
+<p>Integer的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> value;<br></code></pre></td></tr></table></figure>
+
+<p>Double的源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> <span class="hljs-type">double</span> value;<br></code></pre></td></tr></table></figure>
+
+<p><strong>绝对线程安全</strong><br> &#x3D;&gt;	绝对线程安全能够完全满足线程安全的定义，但是在Java中标注自己是线程安全的类，并不一定是绝对线程安全的类。</p>
+<ul>
+<li>比如Vector类，众所周知，它是一个线程安全类，常用的方法都被synchronized修饰。但是，它并不是绝对的线程安全，如果要做到绝对线程安全，必须在内部维护一组一致性的快照访问。每次对元素进行改动都要产生新的快照。但是付出的时间和空间成本是巨大的。</li>
+</ul>
+<p><strong>相对线程安全</strong><br> &#x3D;&gt;	相对线程安全就是我们通常意义上讲的线程安全，他需要保证对这个对象的单次操作是安全的。在Java中，大部分的声明为线程安全的类都是这个级别。比如 Vector,HashTable,Collections中的synchronizedCollection()方法包装的集合等。</p>
+<p><strong>线程兼容</strong><br>&#x3D;&gt;	线程兼容是指对象本身是非线程安全的，但是可以通过在调用端正确的使用同步手段（加锁）来保证在并发下是安全的。Java中大部分的类都在此级别。比如ArrayList,HashMap等。</p>
+<p><strong>线程对立</strong></p>
+<p>&#x3D;&gt;	线程对立是指不管调用端如何进行同步加锁，都无法保证并发下的线程安全。在Java中这种类是很少的，我们要避免使用。比如System.setIn(),System.setOut()等。</p>
+<p><strong>线程安全的实现方案</strong><br>    在Java中，实现线程安全，主要有三种方案, 互斥同步、非阻塞同步、无同步方案</p>
+<blockquote>
+<p>这三种方案的详解可参考JUC篇的笔记内容</p>
+</blockquote>
+<h4 id="锁的优化"><a href="#锁的优化" class="headerlink" title="锁的优化"></a>锁的优化</h4><p>&#x3D;&gt;	 高效并发是JDK5升级到JDK6后一项重要的改进，HotSpot虚拟机开发团队在这个版本上花费了巨大的资源去实现各种锁优化。比如，自旋锁，自适应自旋锁，锁消除，锁膨胀，轻量级锁，偏向锁等。这些技术都是为了在线程之间更高效的共享数据及解决竞争问题。从而提高程序的运行效率。</p>
+<h5 id="自旋锁和自适应自旋锁"><a href="#自旋锁和自适应自旋锁" class="headerlink" title="自旋锁和自适应自旋锁"></a><strong>自旋锁和自适应自旋锁</strong></h5><p><strong>自旋锁</strong></p>
+<p>&#x3D;&gt;	在互斥同步的时候，对性能影响最大的就是阻塞的实现，挂起线程，恢复线程等的操作都需要用户态转为内核态去完成。这些操作给性能带来了巨大的压力。</p>
+<p>​	 虚拟机的开发团队也注意到，共享数据的锁定状态只会持续很短的时间。为了这很短的时间让线程挂起，然后转为内核态的时间可能比锁定状态的时间更长。所以，我们可以让等待同步锁的进程不要进入阻塞，而是在原地稍微等待一会儿，不要放弃处理器的执行时间，看看持有锁的线程是不是很快就会释放锁。为了让线程等待，我们可以让线程执行一个<code>忙循环（原地自旋）</code>,这就是自旋锁。</p>
+<pre><code class="hljs"> 自旋锁在JDK1.4.2之后就已经引入，但是默认是关闭的。我们可以使用`-XX:+UseSpinning`参数来开启。在JDK1.6之后就默认开启了。自旋锁并不是阻塞，所以它避免了用户态到内核态的频繁转化，但是它是要占用处理器的执行时间的。
+ 
+ 如果占有对象锁的线程在很短的时间内就执行完，然后释放锁，这样的话，自旋锁的效果就会非常好。
+ 
+ 如果占有对象锁的线程执行时间很长，那么自旋锁会白白消耗处理器的执行时间，这就带来了性能的浪费。这样的话，还不如将等待的线程进行阻塞。默认的自旋次数是10，也就是说，如果一个线程自旋10次之后，还没有拿到对象锁，那么就会进行阻塞。
+</code></pre>
+<p> 我们也可以使用参数<code>-XX:PreBlockSpin</code>来更改。</p>
+<p><strong>自适应自旋锁</strong></p>
+<p>&#x3D;&gt;	无论是使用默认的10次，还是用户自定义的次数，对整个虚拟机来说所有的线程都是一样的。但是同一个虚拟机中线程的状态并不是一样的，有的锁对象长一点，有的短一点，所以，在JDK1.6的时候，引入了自适应自旋锁。</p>
+<p> 自适应自旋锁意味着自旋的时间不在固定了，而是根据当前的情况动态设置。</p>
+<p> 主要取决于同一个锁上一次的自旋时间和锁的拥有者的状态。</p>
+<p> 如果在同一个对象锁上，上一个获取这个对象锁的线程在自旋等待成功了，没有进入阻塞状态，说明这个对象锁的线程执行时间会很短，虚拟机认为这次也有可能再次成功，进而允许此次自旋时间可以更长一点。</p>
+<p> 如果对于某个锁，自旋状态下很少获得过锁，说明这个对象锁的线程执行时间相对会长一点，那么以后虚拟机可能会直接省略掉自旋的过程。避免浪费处理器资源。</p>
+<p> 自适应自旋锁的加入，随着程序运行时间的增长以及性能监控系统信息的不断完善，虚拟机对程序的自旋时间预测越来越准确，也就是虚拟机越来越聪明了。</p>
+<h5 id="锁消除"><a href="#锁消除" class="headerlink" title="锁消除"></a>锁消除</h5><p>&#x3D;&gt;	锁消除指的是，在即时编译器运行的时候，代码中要求某一段代码块进行互斥同步，但是虚拟机检测到不需要进行互斥同步，因为没有共享数据，此时，虚拟机会进行优化，将互斥同步消除。</p>
+<p> 锁消除的主要判定依据来源于逃逸分析的数据支持。具体来说，如果虚拟机判断到，在一段代码中，创建的对象不会逃逸出去到其他线程，那么就可以把他当作栈上数据对待，同步也就没有必要了。</p>
+<p><strong>有许多互斥同步的要求并不是程序员自己加入的，互斥同步的代码在Java中出现的程度很频繁。</strong></p>
+<h5 id="锁粗化"><a href="#锁粗化" class="headerlink" title="锁粗化"></a><strong>锁粗化</strong></h5><p>&#x3D;&gt;	也就是减少不必要的紧连在一起的unlock，lock操作，将多个连续的锁扩展成一个范围更大的锁。</p>
+<p>​	原则上，我们编写代码的时候，总是推荐将同步代码块的作用范围尽可能的缩小，只有共享数据的地方同步即可。这样是为了使得同步的操作变少，等待锁的线程能尽快的拿到锁。但是，如果一段代码中自始至终都锁的是同一个对象，那么就会对这个对象进行重复的加锁，释放，加锁，释放。频繁的进行用户态和内核态的切换，效率居然变低了。</p>
+<h5 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h5><p> &#x3D;&gt;	轻量级锁是JDK1.6之后加入的新型锁机制，轻量级是相对应于操作系统互斥量来实现的传统锁而言的。因此，传统锁就被称之为重量级锁。但是，要注意，轻量级并不是用来代替重量级的，它设计的初衷是在没有多线程竞争的前提下，减少传统的重量级锁带来的性能消耗问题的。</p>
+<p> 首先，要理解轻量级锁以及后边的偏向锁，必须要先知道，HotSpot中对象的内存布局。对象的内存布局分为三部分，一部分是对象头（Mark Word），一部分是实例数据，还有一部分对其填充，为了让对象的大小为8字节的整数倍。</p>
+<ul>
+<li>对象头中包括两部分的数据包括，对象的哈希码，GC分代年龄，锁状态等。 如果对象是数组，那么还会有额外的一部分存储数组长度。</li>
+</ul>
+<h5 id="加锁过程"><a href="#加锁过程" class="headerlink" title="加锁过程"></a>加锁过程</h5><p>​	在代码即将进入同步块的时候，虚拟机就会在当前栈帧中建立一个名为锁记录（Lock Record）的空间。然后将堆中对象的对象头拷贝到锁记录（官方给它加了Displaced前缀）便于修改对象头的引用时存储之前的信息。</p>
+<p><img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902183256865.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902183256865"></p>
+<p>​	然后，虚拟机将使用CAS（原子）操作尝试把堆中对象的对象头中前30个字节更新为指向锁记录的引用。</p>
+<ul>
+<li>如果成功，代表当前线程已经拥有了该对象的对象锁。然后将堆中对象头的锁标志位改为00。此时，代表对象就处于轻量级锁定状态。</li>
+</ul>
+<p><img src="/2022/09/14/JVM08-%E9%AB%98%E6%95%88%E5%B9%B6%E5%8F%91/image-20220902183600277.png" srcset="/Blog/img/loading.gif" lazyload alt="image-20220902183600277"></p>
+<ul>
+<li><p>如果失败也就是堆中对象头的锁状态已经是0，则意味着对象的对象锁别拿走了。</p>
+<p>虚拟机会判断对象的前30个字节是不是指向当前线程</p>
+<ul>
+<li>​	如果是，说明当前线程已经拿到了对象锁，可以直接执行同步代码块。</li>
+<li>​	如果不是，说明对象锁被其他线程拿走了，必须等待。也就是进入自旋模式，如果在自旋一定次数后仍为获得锁，那么轻量级锁将会膨胀成重量级锁。</li>
+</ul>
+<p>如果发现有两条以上线程争用同一个对象锁，那么轻量级锁就不在有效，必须膨胀为重量锁，将对象的锁状态改为10。此时，堆中对象的对象头前30个字节的引用就是指向重量级锁。</p>
+</li>
+</ul>
+<h5 id="解锁过程"><a href="#解锁过程" class="headerlink" title="解锁过程"></a>解锁过程</h5><p>&#x3D;&gt;	如果堆中对象头的前30个字节指向当前线程，说明当前线程拥有对象锁，就用CAS操作将加锁的时候复制到栈帧锁记录中的对象头替换到堆中对象的对象头。并将堆中对象头的锁状态改为01。</p>
+<ul>
+<li>如果替换成功，说明解锁完成。</li>
+<li>如果发现有别的线程尝试过获取堆中对象的对象锁，就要在释放锁的同时，唤醒被阻塞的线程。</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/Blog/tags/JVM/">#JVM</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>JVM08-高效并发</div>
+      <div>https://he498.github.io/Blog/2022/09/14/JVM08-高效并发/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>he498</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年9月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Blog/2022/09/14/MybaitsPlus-studyDemo/" title="MybaitsPlus_studyDemo">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MybaitsPlus_studyDemo</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Blog/2022/09/14/JVM07-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" title="JVM07-性能优化">
+                        <span class="hidden-mobile">JVM07-性能优化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <i class="iconfont icon-love"></i> <a href="https://github.com/he498" target="_blank" rel="nofollow noopener"><span>GitHub</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/Blog/js/events.js" ></script>
+<script  src="/Blog/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/Blog/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/Blog/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/Blog/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
